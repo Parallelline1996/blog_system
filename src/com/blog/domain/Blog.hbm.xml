@@ -4,7 +4,7 @@
 
 <hibernate-mapping package="com.blog.domain">
 
-    <class name="Blog" table="BLOG">
+    <class name="Blog" table="blog">
     	
         <id name="blogId" type="java.lang.String">
             <column name="blog_ID" />
@@ -38,7 +38,7 @@
             <column name="last_modified_time" />
         </property>
         
-        <property name="userId" type="java.lang.Integer">
+        <property name="userId" type="java.lang.String">
             <column name="user_ID" />
         </property>
         

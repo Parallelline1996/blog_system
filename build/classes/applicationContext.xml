@@ -19,7 +19,7 @@
 	2. url待整理 -->
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
 		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
-		<property name="url" value="jdbc:mysql:///blog" />
+		<property name="url" value="jdbc:mysql:///blog_system" />
 		<property name="username" value="root" />
 		<property name="password" value="88888" />
 	</bean>
@@ -41,8 +41,13 @@
 		<!-- 配置持久化类 -->
 		<property name="mappingResources">
 			<list>
+				<value>com/blog/domain/Admin.hbm.xml</value>
 				<value>com/blog/domain/Blog.hbm.xml</value>
+				<value>com/blog/domain/Comment.hbm.xml</value>
+				<value>com/blog/domain/Follow.hbm.xml</value>
 				<value>com/blog/domain/Tag.hbm.xml</value>
+				<value>com/blog/domain/UpOrDown.hbm.xml</value>
+				<value>com/blog/domain/User.hbm.xml</value>
 			</list>
 		</property>
 	</bean>

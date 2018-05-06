@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.blog.domain">
+
+    <class name="User" table="user">
+    	
+        <id name="userId" type="java.lang.String">
+            <column name="user_ID" />
+        </id>
+   
+        <property name="nickName" type="java.lang.String">
+            <column name="nickname" />
+        </property>
+        
+        <property name="password" type="java.lang.String">
+            <column name="password" />
+        </property>
+        
+        <property name="eMail" type="java.lang.String">
+            <column name="e_mail" />
+        </property>
+        
+        <property name="phoneNumber" type="java.lang.String">
+            <column name="phone_number" />
+        </property>
+        
+        <!-- 
+        <property name="profile" type="com.mysql.jdbc.Blob">
+            <column name="profile" />
+        </property>
+         -->
+        
+         <property name="status" type="java.lang.Integer">
+            <column name="u_status" />
+        </property>
+        
+         <property name="numOfFans" type="java.lang.Integer">
+            <column name="num_of_fans" />
+        </property>
+        
+         <property name="NumOfAttention" type="java.lang.Integer">
+            <column name="num_of_attention" />
+        </property>
+    </class>
+    
+</hibernate-mapping>

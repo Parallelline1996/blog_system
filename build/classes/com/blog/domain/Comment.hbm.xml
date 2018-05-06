@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.blog.domain">
+
+	
+    <class name="Comment" table="comment">
+    	
+        <id name="commentId" type="java.lang.String">
+            <column name="comment_ID" />
+            <!-- 实现自增 -->
+            <generator class="identity"/>
+        </id>
+   
+        <property name="commentObjectId" type="java.lang.String">
+            <column name="comment_object_ID" />
+        </property>
+        
+        <property name="content" type="java.lang.String">
+            <column name="c_content" />
+        </property>
+        
+        <property name="status" type="java.lang.Integer">
+            <column name="c_status" />
+        </property>
+        
+        <property name="sendTime" type="java.util.Date">
+            <column name="send_time" />
+        </property>
+        
+        <property name="objectOption" type="java.lang.Integer">
+            <column name="object_option" />
+        </property>
+        
+        <property name="userId" type="java.lang.String">
+            <column name="user_ID" />
+        </property>
+        
+    </class>
+    
+</hibernate-mapping>

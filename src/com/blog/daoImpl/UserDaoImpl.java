@@ -15,8 +15,7 @@ public class UserDaoImpl extends HibernateUtil implements UserDao {
 
 	@Override
 	public boolean createUser(User user) {
-		// TODO Auto-generated method stub
-		return false;
+		return save(user);
 	}
 
 	@Override
