@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.blog.domain">
+
+    <class name="Tag" table="Tag">
+    	
+        <id name="tagId" type="java.lang.String">
+            <column name="tag_ID" />
+        </id>
+   
+        <property name="userId" type="java.lang.String">
+            <column name="user_ID" />
+        </property>
+        
+        <property name="tagContent" type="java.lang.String">
+            <column name="t_content" />
+        </property>
+   
+   		<set name="blogs" table="blog_tag" inverse="true">
+   			<key column="tagId"/>
+   			<many-to-many class="com.blog.domain.Blog" column="blogId"/>
+   		</set>
+    </class>
+    
+</hibernate-mapping>

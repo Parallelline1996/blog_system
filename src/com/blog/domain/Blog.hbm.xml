@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="com.blog.domain">
+
+    <class name="Blog" table="BLOG">
+    	
+        <id name="blogId" type="java.lang.String">
+            <column name="blog_ID" />
+        </id>
+   
+        <property name="blogTitle" type="java.lang.String">
+            <column name="title" />
+        </property>
+        
+        <property name="blogContent" type="java.lang.String">
+            <column name="b_content" />
+        </property>
+        
+        <property name="numberOfAgree" type="java.lang.Integer">
+            <column name="b_num_of_agree" />
+        </property>
+        
+        <property name="numberOfDisagree" type="java.lang.Integer">
+            <column name="b_num_of_disagree" />
+        </property>
+        
+        <property name="blogState" type="java.lang.Integer">
+            <column name="b_status" />
+        </property>
+        
+        <property name="postTime" type="java.util.Date">
+            <column name="post_time" />
+        </property>
+        
+        <property name="lastModifiedTime" type="java.util.Date">
+            <column name="last_modified_time" />
+        </property>
+        
+        <property name="userId" type="java.lang.Integer">
+            <column name="user_ID" />
+        </property>
+        
+        <set name="tags" table="blog_tag">
+        	<!-- 当前类在中间表中的外键 -->
+            <key column="blogId" />
+            <many-to-many class="com.blog.domain.Tag" column="tagId"/>
+        </set>
+    </class>
+    
+</hibernate-mapping>
