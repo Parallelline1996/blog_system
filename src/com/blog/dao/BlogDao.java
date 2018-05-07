@@ -11,6 +11,8 @@ public interface BlogDao {
 	
 	boolean deleteBlog(String blogId);
 	
+	boolean deleteBlogToTrashBin(String blogId);
+	
 	boolean updateBlog(Blog blog);
 	
 	Blog findBlogById(String blogId);
@@ -20,6 +22,12 @@ public interface BlogDao {
 	boolean cachBlog(Blog blog);
 	
 	List<Blog> allBlog();
+	
+	List<Blog> allBlogById(String userId);
+	
+	List<Blog> listPageAllBlog(int pageNo, int pageNum);
+	
+	List<Blog> listPageAllBlogById(int pageNo, int pageNum);
 	
 	List<BlogList> selectTag(String tagId);
 }

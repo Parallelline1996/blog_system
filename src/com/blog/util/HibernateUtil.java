@@ -8,6 +8,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 
+
 public class HibernateUtil {
 
 	@Autowired
@@ -119,6 +120,7 @@ public class HibernateUtil {
 	}
 
 	//执行一个HQL语句，并返回所有的data
+	@SuppressWarnings("unchecked")
 	public List<Object> findByHqlGetList(String hql, Object[] condition) {
 		Query query = sessionFactory.openSession().createQuery(hql);
 		for (int i = 0, len = condition.length; i < len; i++) {
@@ -128,6 +130,7 @@ public class HibernateUtil {
 	}
 
 	//分页显示
+	@SuppressWarnings("unchecked")
 	public List<Object> listpage(String hql, int pageNo, int pageNum) {
 		Session session = sessionFactory.openSession();
 
@@ -135,9 +138,7 @@ public class HibernateUtil {
 
 		query.setFirstResult((pageNo - 1) * pageNum);
 		query.setMaxResults(pageNum);
-		List<Object> list = query.list();
-
-		return list;
+		return (List<Object>) query.list();
 	}
 	
 	//获取数目
