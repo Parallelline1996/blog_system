@@ -26,11 +26,10 @@
             <column name="phone_number" />
         </property>
         
-        <!-- 
-        <property name="profile" type="com.mysql.jdbc.Blob">
+        
+        <property name="profile" type="java.sql.Blob">
             <column name="profile" />
         </property>
-         -->
         
          <property name="status" type="java.lang.Integer">
             <column name="u_status" />

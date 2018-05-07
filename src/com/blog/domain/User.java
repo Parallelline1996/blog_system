@@ -1,6 +1,7 @@
 package com.blog.domain;
 
-import com.mysql.jdbc.Blob;
+//import com.mysql.jdbc.Blob;
+import java.sql.Blob;
 
 public class User {
 
@@ -9,7 +10,7 @@ public class User {
 	private String password;
 	private String eMail;
 	private String phoneNumber;
-	//private Blob profile;
+	private Blob profile;
 	private Integer status;
 	private Integer numOfFans;
 	private Integer NumOfAttention;
@@ -43,13 +44,12 @@ public class User {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-	/*
 	public Blob getProfile() {
 		return profile;
 	}
 	public void setProfile(Blob profile) {
 		this.profile = profile;
-	}*/
+	}
 	public Integer getStatus() {
 		return status;
 	}
@@ -78,7 +78,7 @@ public class User {
 		result = prime * result + ((numOfFans == null) ? 0 : numOfFans.hashCode());
 		result = prime * result + ((password == null) ? 0 : password.hashCode());
 		result = prime * result + ((phoneNumber == null) ? 0 : phoneNumber.hashCode());
-		//result = prime * result + ((profile == null) ? 0 : profile.hashCode());
+		result = prime * result + ((profile == null) ? 0 : profile.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		result = prime * result + ((userId == null) ? 0 : userId.hashCode());
 		return result;
@@ -113,7 +113,7 @@ public class User {
 		this.password = password;
 		this.eMail = eMail;
 		this.phoneNumber = phoneNumber;
-		//this.profile = profile;
+		this.profile = profile;
 		this.status = status;
 		this.numOfFans = numOfFans;
 		NumOfAttention = numOfAttention;
