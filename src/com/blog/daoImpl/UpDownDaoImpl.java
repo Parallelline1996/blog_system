@@ -18,7 +18,6 @@ public class UpDownDaoImpl extends HibernateUtil implements UpDownDao{
 
 	@Override
 	public boolean agree(String userId, String blogId) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

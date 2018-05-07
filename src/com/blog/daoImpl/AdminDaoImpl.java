@@ -16,7 +16,7 @@ import com.blog.util.HibernateUtil;
 public class AdminDaoImpl extends HibernateUtil implements AdminDao {
 
 	@Autowired
-	@Qualifier
+	@Qualifier("sessionFactory")
 	private SessionFactory sessionFactory;
 	
 	@Override

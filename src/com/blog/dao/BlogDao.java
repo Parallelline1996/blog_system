@@ -29,5 +29,5 @@ public interface BlogDao {
 	
 	List<Blog> listPageAllBlogById(int pageNo, int pageNum);
 	
-	List<BlogList> selectTag(String tagId);
+	List<BlogList> selectTag(Blog blog, String tagId);
 }

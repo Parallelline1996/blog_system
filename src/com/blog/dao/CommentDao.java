@@ -13,4 +13,6 @@ public interface CommentDao {
 	List<Comment> allCommentYouMade(String userId);
 	
 	List<Comment> allCommentYouGet(String userId);
+	
+	Comment findCommentById(String commentId);
 }

@@ -8,6 +8,7 @@
     	
         <id name="tagId" type="java.lang.String">
             <column name="tag_ID" />
+            <generator class="identity"/>
         </id>
    
         <property name="userId" type="java.lang.String">

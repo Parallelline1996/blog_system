@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -21,7 +20,7 @@ import com.blog.util.response.BlogList;
 public class BlogDaoImpl extends HibernateUtil implements BlogDao {
 
 	@Autowired
-	@Qualifier("sesstionFactory")
+	@Qualifier("sessionFactory")
 	private SessionFactory sessionFactory;
 	
 	@Override
@@ -53,13 +52,13 @@ public class BlogDaoImpl extends HibernateUtil implements BlogDao {
 	public Blog findBlogById(String blogId) {
 		Blog blog = null;
 		Session session = sessionFactory.openSession();
-		Transaction transaction = session.beginTransaction();
+		//Transaction transaction = session.beginTransaction();
 		try {
 			blog = (Blog) session.get(Blog.class, blogId);
-			transaction.commit();
+			//transaction.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
-			transaction.rollback();
+			//transaction.rollback();
 		} finally {
 			session.close();
 		}
@@ -83,18 +82,21 @@ public class BlogDaoImpl extends HibernateUtil implements BlogDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Blog> allBlog() {
-		String hql = "form blog";
+		String hql = "from blog";
+		return (List<Blog>) findByHql(hql, null);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Blog> allBlogById(String userId) {
+		// 未被检验
+		String hql = "from blog as b where b.id  = 'userId'";
 		return (List<Blog>) findByHql(hql, null);
 	}
 
 	@Override
-	public List<Blog> allBlogById(String userId) {
-		return null;
-	}
-
-	@Override
 	public List<Blog> listPageAllBlog(int pageNo, int pageNum) {
-		String hql = "form blog";
+		String hql = "from blog";
 		List<Object> temp = null;
 		temp = listpage(hql, pageNo, pageNum);
 		List<Blog> blogs = new ArrayList<>();
@@ -107,12 +109,13 @@ public class BlogDaoImpl extends HibernateUtil implements BlogDao {
 	@Override
 	public List<Blog> listPageAllBlogById(int pageNo, int pageNum) {
 		// TODO Auto-generated method stub
+		// 暂时不完成
 		return null;
 	}
 
 	@Override
-	public List<BlogList> selectTag(String tagId) {
-		// TODO Auto-generated method stub
+	public List<BlogList> selectTag(Blog blog, String tagId) {
+		// 暂时跳过
 		return null;
 	}
 

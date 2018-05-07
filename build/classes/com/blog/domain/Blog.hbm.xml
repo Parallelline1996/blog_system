@@ -8,6 +8,7 @@
     	
         <id name="blogId" type="java.lang.String">
             <column name="blog_ID" />
+            <generator class="identity"/>
         </id>
    
         <property name="blogTitle" type="java.lang.String">

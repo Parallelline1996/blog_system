@@ -1,9 +1,16 @@
 package com.blog.daoImpl;
 
+import java.util.Set;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
+import com.blog.dao.BlogDao;
 import com.blog.dao.TagDao;
+import com.blog.domain.Blog;
 import com.blog.domain.Tag;
 import com.blog.util.HibernateUtil;
 
@@ -11,22 +18,46 @@ import com.blog.util.HibernateUtil;
 @Qualifier("tagDaoImpl")
 public class TagDaoImpl extends HibernateUtil implements TagDao {
 
+	@Autowired
+	@Qualifier("blogDaoImpl")
+	private BlogDao blogDao;
+	
+	@Autowired
+	@Qualifier("sessionFactory")
+	private SessionFactory sessionFactory;
+	
 	@Override
 	public boolean createTag(Tag tag) {
-		// TODO Auto-generated method stub
-		return false;
+		return save(tag);
 	}
 
 	@Override
 	public boolean deleteTag(Tag tag) {
-		// TODO Auto-generated method stub
-		return false;
+		return delete(tag);
 	}
 
 	@Override
 	public boolean setTag(String tagId, String blogId) {
-		// TODO Auto-generated method stub
-		return false;
+		Blog blog = blogDao.findBlogById(blogId);
+		Set<Tag> temp = blog.getTags();
+		Tag tag = findTagById(tagId);
+		temp.add(tag);
+		blog.setTags(temp);
+		return true;
+	}
+
+	@Override
+	public Tag findTagById(String tagId) {
+		Session session = sessionFactory.openSession();
+		Tag tag = null;
+		try {
+			tag = (Tag)session.get(Tag.class, tagId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return tag;
 	}
 
 }
