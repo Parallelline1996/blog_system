@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.blog.domain.Blog;
 import com.blog.domain.User;
 import com.blog.service.AccountService;
+import com.blog.service.NormalService;
 import com.blog.util.request.CreateUserData;
 import com.blog.util.request.LoginData;
 import com.blog.util.response.BlogList;
@@ -22,6 +23,10 @@ public class MormalController {
 	@Autowired
 	@Qualifier("accountServiceImpl")
 	private AccountService accountService;
+	
+	@Autowired
+	@Qualifier("normalServiceImpl")
+	private NormalService normalService;
 	
 	// 注册函数
 	public int register(CreateUserData data) {

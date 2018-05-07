@@ -2,12 +2,15 @@ package com.blog.controller;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 
 import com.blog.domain.Blog;
 import com.blog.domain.Comment;
 import com.blog.domain.Tag;
 import com.blog.domain.User;
+import com.blog.service.UserService;
 import com.blog.util.request.BlogWithTag;
 import com.blog.util.response.BlogList;
 import com.blog.util.response.UserSimpleData;
@@ -15,6 +18,10 @@ import com.blog.util.response.UserSimpleData;
 @Controller
 public class UserController {
 
+	@Autowired
+	@Qualifier("userServiceImpl")
+	private UserService userService;
+	
 	// 关注
 	public int createFollow(String ownId, String userId) {
 		return 100;

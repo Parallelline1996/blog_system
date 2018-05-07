@@ -2,15 +2,21 @@ package com.blog.serviceImpl;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
+import com.blog.dao.BlogDao;
+import com.blog.dao.CommentDao;
+import com.blog.dao.FollowDao;
+import com.blog.dao.TagDao;
+import com.blog.dao.UpDownDao;
+import com.blog.dao.UserDao;
 import com.blog.domain.Blog;
 import com.blog.domain.Comment;
 import com.blog.domain.Tag;
 import com.blog.domain.User;
 import com.blog.service.UserService;
-import com.blog.util.request.BlogWithTag;
 import com.blog.util.response.BlogList;
 import com.blog.util.response.UserSimpleData;
 
@@ -18,6 +24,30 @@ import com.blog.util.response.UserSimpleData;
 @Qualifier("userServiceImpl")
 public class UserServiceImpl implements UserService {
 
+	@Autowired
+	@Qualifier("followDaoImpl")
+	private FollowDao followDao;
+	
+	@Autowired
+	@Qualifier("tagDaoImpl")
+	private TagDao tagDao;
+	
+	@Autowired
+	@Qualifier("blogDaoImpl")
+	private BlogDao blogDao;
+	
+	@Autowired
+	@Qualifier("upDownDaoImpl")
+	private UpDownDao upDownDao;
+	
+	@Autowired
+	@Qualifier("userDaoImpl")
+	private UserDao userDao;
+	
+	@Autowired
+	@Qualifier("commentDaoImpl")
+	private CommentDao commentDao;
+	
 	@Override
 	public int createFollow(String ownId, String userId) {
 		// TODO Auto-generated method stub
