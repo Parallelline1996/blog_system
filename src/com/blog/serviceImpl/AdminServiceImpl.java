@@ -21,19 +21,28 @@ public class AdminServiceImpl implements AdminService {
 	@Override
 	public List<User> allUsers() {
 		// TODO Auto-generated method stub
-		return null;
+		return userDao.allUser();
 	}
 
 	@Override
 	public User findUserById(String userId) {
 		// TODO Auto-generated method stub
-		return null;
+		return userDao.findUserById(userId);
 	}
 
 	@Override
 	public boolean deleteUser(String userId) {
 		// TODO Auto-generated method stub
-		return false;
+		if(userDao.findUserById(userId).getStatus()==1)
+		{
+			return false;
+		}
+		if(userDao.deleteUser(userId)==true)
+		{
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
-
 }

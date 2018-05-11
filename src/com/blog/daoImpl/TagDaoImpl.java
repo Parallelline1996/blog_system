@@ -39,11 +39,16 @@ public class TagDaoImpl extends HibernateUtil implements TagDao {
 	@Override
 	public boolean setTag(String tagId, String blogId) {
 		Blog blog = blogDao.findBlogById(blogId);
-		Set<Tag> temp = blog.getTags();
-		Tag tag = findTagById(tagId);
-		temp.add(tag);
-		blog.setTags(temp);
-		return true;
+		if(blog!=null) {
+			Set<Tag> temp = blog.getTags();
+			Tag tag = findTagById(tagId);
+			if(tag!=null) {
+				temp.add(tag);
+				blog.setTags(temp);
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override

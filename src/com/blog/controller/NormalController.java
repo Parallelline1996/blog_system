@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,7 +19,7 @@ import com.blog.util.request.LoginData;
 import com.blog.util.response.BlogList;
 
 @Controller
-public class MormalController {
+public class NormalController {
 
 	@Autowired
 	@Qualifier("accountServiceImpl")
@@ -40,18 +41,24 @@ public class MormalController {
 	}
 	
 	// 登陆函数
-	public int login(LoginData data) {
+	@ResponseBody
+	@RequestMapping("/login")
+	public int login(@RequestBody LoginData data) {//不通过
 		// 到时候看看是返回id还是返回状态码
-		return 1;
+		return accountService.login(data);
 	}
 	
 	// 查看博客列表
-	public List<BlogList> blogLists() {
-		return null;
+	@ResponseBody
+	@RequestMapping("/showBlog")
+	public List<BlogList> blogLists() {//通过
+		return normalService.readBlog();
 	}
 	
 	// 查看某一条博客的具体信息
-	public Blog blogDetail(String blogId) {
-		return null;
+	@ResponseBody
+	@RequestMapping("/blogdetail/{blogId}")
+	public Blog blogDetail(@PathVariable("blogId") String blogId) {//不通过 could not write json
+		return normalService.findBlogById(blogId);
 	}
 }

@@ -35,5 +35,44 @@ public class AdminDaoImpl extends HibernateUtil implements AdminDao {
 		}
 		return admin;
 	}
-
+	@Override
+	public boolean adminExist(String eMail) {
+		Session session = sessionFactory.openSession();
+		String hql = "from Admin where eMail = ? ";
+		Admin admin = null;
+		try {
+			// 当确定返回值为1个或null时，使用uniqueResult
+			admin = (Admin)session.createQuery(hql)
+					.setParameter(0, eMail)
+					.uniqueResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		// 是否存在，存在的话返回的是true
+		if (admin != null)
+			return true;
+		return false;
+	}
+	@Override
+	public boolean checkPassword(String eMail,String password) {
+		Session session = sessionFactory.openSession();
+		String hql = "from Admin where eMail = ? and password = ?";
+		Admin admin = null;
+		try {
+			// 当确定返回值为1个或null时，使用uniqueResult
+			admin = (Admin)session.createQuery(hql)
+					.setParameter(0, eMail).setParameter(1, password)
+					.uniqueResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		// 是否存在，存在的话返回的是true
+		if (admin != null)
+			return true;
+		return false;
+	}
 }

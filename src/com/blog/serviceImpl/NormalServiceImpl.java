@@ -1,5 +1,6 @@
 package com.blog.serviceImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,6 @@ import com.blog.dao.UpDownDao;
 import com.blog.domain.Blog;
 import com.blog.service.NormalService;
 import com.blog.util.response.BlogList;
-
 @Service
 @Qualifier("normalServiceImpl")
 public class NormalServiceImpl implements NormalService {
@@ -33,13 +33,25 @@ public class NormalServiceImpl implements NormalService {
 	public List<BlogList> readBlog() {
 		// TODO Auto-generated method stub
 		// 注意这里要完成转换，from blog to blogList
-		return null;
+		List<Blog> blogs = blogDao.allBlog();
+		List<BlogList> bloglist =  new ArrayList<>();
+		try {
+			for(Blog Blog : blogs) {
+				bloglist.add(new BlogList(Blog.getBlogId(),Blog.getBlogTitle(),Blog.getNumberOfAgree(),
+					Blog.getBlogState(),Blog.getPostTime(),Blog.getUserId()));
+			}
+		}catch (NullPointerException e) {
+			bloglist = null;
+			// TODO: handle exception
+		}
+		return bloglist; 
 	}
 
 	@Override
 	public Blog findBlogById(String blogId) {
 		// TODO Auto-generated method stub
-		return null;
+		return blogDao.findBlogById(blogId);
 	}
+
 
 }

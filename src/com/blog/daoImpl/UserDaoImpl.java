@@ -43,7 +43,7 @@ public class UserDaoImpl extends HibernateUtil implements UserDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<User> allUser() {
-		String hql = "from user";
+		String hql = "from User";
 		return (List<User>)findByHql(hql, null);
 	}
 
@@ -51,7 +51,7 @@ public class UserDaoImpl extends HibernateUtil implements UserDao {
 	public boolean deleteUser(String userId) {
 		User user = findUserById(userId);
 		user.setStatus(1);
-		return true;
+		return save(user);
 	}
 
 	@Override
@@ -63,6 +63,47 @@ public class UserDaoImpl extends HibernateUtil implements UserDao {
 	public int newUserNumber() {
 		// 似乎，不需要用。。暂时不写
 		return 0;
+	}
+	@Override
+	public boolean accountExist(String account) {
+		//测试通过
+		Session session = sessionFactory.openSession();
+		String hql = "from User where eMail = ? and status = ? ";
+		User user = null;
+		try {
+			// 当确定返回值为1个或null时，使用uniqueResult
+			user = (User)session.createQuery(hql)
+					.setParameter(0, account).setParameter(1, 0)
+					.uniqueResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		// 是否存在，存在的话返回的是true
+		if (user != null)
+			return true;
+		return false;
+	}
+	@Override
+	public boolean checkPassword(String email,String password) {
+		Session session = sessionFactory.openSession();
+		String hql = "from User where  password = ? and eMail = ?";
+		User user = null;
+		try {
+			// 当确定返回值为1个或null时，使用uniqueResult
+			user = (User)session.createQuery(hql)
+					.setParameter(0,password).setParameter(1, email)
+					.uniqueResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		// 是否存在，存在的话返回的是true
+		if (user != null)
+			return true;
+		return false;
 	}
 
 }
