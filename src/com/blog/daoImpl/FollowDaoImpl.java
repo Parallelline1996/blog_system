@@ -1,13 +1,18 @@
 package com.blog.daoImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import com.blog.dao.FollowDao;
 import com.blog.dao.UserDao;
+import com.blog.domain.Blog;
 import com.blog.domain.Follow;
 import com.blog.domain.FollowUpId;
 import com.blog.domain.User;
@@ -28,8 +33,14 @@ public class FollowDaoImpl extends HibernateUtil implements FollowDao{
 		Follow follow = new Follow(followUpId);
 		User fans = userDao.findUserById(userId);
 		User blogger = userDao.findUserById(ownId);
-		fans.setNumOfAttention(fans.getNumOfAttention() + 1);
-		blogger.setNumOfFans(blogger.getNumOfFans() + 1);
+		if(fans!=null){
+			fans.setNumOfAttention(fans.getNumOfAttention() + 1);
+			
+		}
+		if(blogger!=null) {
+			blogger.setNumOfFans(blogger.getNumOfFans() + 1);
+			
+		}
 		return save(follow);
 	}
 
@@ -39,23 +50,74 @@ public class FollowDaoImpl extends HibernateUtil implements FollowDao{
 		Follow follow = new Follow(followUpId);
 		User fans = userDao.findUserById(userId);
 		User blogger = userDao.findUserById(ownId);
-		fans.setNumOfAttention(fans.getNumOfAttention() - 1);
-		blogger.setNumOfFans(blogger.getNumOfFans() - 1);
+		if(fans!=null){
+			fans.setNumOfAttention(fans.getNumOfAttention() - 1);
+		}
+		if(blogger!=null) {
+			blogger.setNumOfFans(blogger.getNumOfFans() - 1);
+		}
 		return delete(follow);
 	}
 
 	@Override
 	public List<String> visitFans(String ownId) {
 		// TODO Auto-generated method stub
-		// 待完成
-		return null;
+		// 待完成 好像不行
+		String hql = "from FollowUpId where ownId = ?";
+		
+		Session session = getSessionFactory().openSession();
+		Transaction tx = session.beginTransaction();
+		List<FollowUpId> res = null;
+		List<String> s = null;
+		Query query = null;
+		try {
+			query = session.createQuery(hql).setParameter(0, ownId);
+			res = query.list();
+		} catch (Exception e) {
+            e.printStackTrace();
+		}finally{
+			session.close();
+		}
+		if(res!=null)
+		 {
+
+			for(FollowUpId FollowUpId : res)
+			{
+				s.add(FollowUpId.getBloggerId());
+			}
+		
+		}
+		return s;
 	}
 
 	@Override
 	public List<String> visitFollow(String ownId) {
 		// TODO Auto-generated method stub
-		// 待完成
-		return null;
+		// 待完成,好像不行
+		String hql = "from FollowUpId where userId = ?";
+		
+		Session session = getSessionFactory().openSession();
+		Transaction tx = session.beginTransaction();
+		List<FollowUpId> res = null;
+		List<String> s = null;
+		Query query = null;
+		try {
+			query = session.createQuery(hql).setParameter(0, ownId);
+			res = query.list();
+		} catch (Exception e) {
+            e.printStackTrace();
+		}finally{
+			session.close();
+		}
+		if(res!=null)
+		 {
+
+			for(FollowUpId FollowUpId : res)
+			{
+				s.add(FollowUpId.getBloggerId());
+			}
+		}
+		return s;
 	}
 
 	@Override

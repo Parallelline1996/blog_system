@@ -3,14 +3,17 @@ package com.blog.daoImpl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import com.blog.dao.BlogDao;
 import com.blog.domain.Blog;
+import com.blog.domain.User;
 import com.blog.util.HibernateUtil;
 import com.blog.util.response.BlogList;
 
@@ -32,7 +35,7 @@ public class BlogDaoImpl extends HibernateUtil implements BlogDao {
 	public boolean deleteBlog(String blogId) {
 		Blog blog = findBlogById(blogId);
 		blog.setBlogState(2);
-		return true;
+		return save(blog);
 	}
 
 	@Override
@@ -40,7 +43,7 @@ public class BlogDaoImpl extends HibernateUtil implements BlogDao {
 		Blog blog = findBlogById(blogId);
 		// blogState: 0->正常  1->垃圾箱  2->彻底删除 
 		blog.setBlogState(1);
-		return true;
+		return save(blog);
 	}
 	
 	@Override
@@ -69,7 +72,7 @@ public class BlogDaoImpl extends HibernateUtil implements BlogDao {
 	public boolean undoDeleteBlog(String blogId) {
 		Blog blog = findBlogById(blogId);
 		blog.setBlogState(0);
-		return false;
+		return save(blog);
 	}
 
 	@Override
@@ -82,21 +85,37 @@ public class BlogDaoImpl extends HibernateUtil implements BlogDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Blog> allBlog() {
-		String hql = "from blog";
-		return (List<Blog>) findByHql(hql, null);
+		String hql = "from Blog";
+		
+		Session session = getSessionFactory().openSession();
+		Transaction tx = session.beginTransaction();
+		List<Blog> res = null;
+		Query query = null;
+		try {
+			query = session.createQuery(hql);
+			res = query.list();
+		} catch (Exception e) {
+            e.printStackTrace();
+		}finally{
+			session.close();
+		}
+		
+		return res;
+		//String hql = "from Blog";
+		//return (List<Blog>) findByHql(hql, null);
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Blog> allBlogById(String userId) {
 		// 未被检验
-		String hql = "from blog as b where b.id  = 'userId'";
+		String hql = "from Blog as b where b.id  = 'userId'";
 		return (List<Blog>) findByHql(hql, null);
 	}
 
 	@Override
 	public List<Blog> listPageAllBlog(int pageNo, int pageNum) {
-		String hql = "from blog";
+		String hql = "from Blog";
 		List<Object> temp = null;
 		temp = listpage(hql, pageNo, pageNum);
 		List<Blog> blogs = new ArrayList<>();

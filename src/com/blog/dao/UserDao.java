@@ -18,4 +18,8 @@ public interface UserDao {
 	
 	// 用于创建新的对象时，查看数据库的情况并生成id
 	int newUserNumber();
+	
+	boolean accountExist(String account);
+	
+	boolean checkPassword(String email,String password);
 }

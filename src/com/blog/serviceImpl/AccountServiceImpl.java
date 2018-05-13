@@ -3,6 +3,7 @@ package com.blog.serviceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.blog.dao.AdminDao;
 import com.blog.dao.UserDao;
@@ -38,9 +39,32 @@ public class AccountServiceImpl implements AccountService {
 	}
 
 	@Override
-	public int login(LoginData data) {
+	public int login(@RequestBody LoginData data) {
 		// TODO Auto-generated method stub
-		return 0;
+		// 返回2代表是管理员账号，1代表普通用户
+		//0代表用户不存在账号被封禁,-1代表用户密码错误，-2代表管理员密码错误。
+
+		if(userDao.accountExist(data.getEmail())) {//通过
+			if(userDao.checkPassword(data.getEmail(), data.getPassword())) {//通过
+				return 1;
+			}
+			else {
+				return -1;
+			}
+		}
+
+		else if(adminDao.adminExist(data.getEmail())){//测试不通过
+			if(adminDao.checkPassword(data.getEmail(), data.getPassword())){//测试不通过
+				return 2;
+			}
+			else {
+				return -2;
+			}
+		}
+		else {
+			return 0;
+		}
+
 	}
 
 }
