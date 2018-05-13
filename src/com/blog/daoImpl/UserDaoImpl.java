@@ -43,7 +43,7 @@ public class UserDaoImpl extends HibernateUtil implements UserDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<User> allUser() {
-		String hql = "from user";
+		String hql = "from User";
 		return (List<User>)findByHql(hql, null);
 	}
 

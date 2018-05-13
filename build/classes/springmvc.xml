@@ -28,6 +28,8 @@
 	</bean>
 	
 	<mvc:default-servlet-handler/>
+	
+	<!-- 使用注解驱动 -->
 	<mvc:annotation-driven/>
 	
 	<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />
