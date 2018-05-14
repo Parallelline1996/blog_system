@@ -24,9 +24,11 @@ public class UpDownDaoImpl extends HibernateUtil implements UpDownDao{
 	@Autowired
 	@Qualifier("sessionFactory")
 	private SessionFactory sessionFactory;
+	
 	@Autowired
 	@Qualifier("userDaoImpl")
 	private UserDao userDao;
+	
 	@Autowired
 	@Qualifier("blogDaoImpl")
 	private BlogDao blogDao;
