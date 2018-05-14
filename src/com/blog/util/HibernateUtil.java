@@ -129,6 +129,12 @@ public class HibernateUtil {
 		return (List<Object>) query.list();
 	}
 
+	@SuppressWarnings("unchecked")
+	public List<Object> findByHqlGetList(String hql) {
+		Query query = sessionFactory.openSession().createQuery(hql);
+		return query.list();
+	}
+	
 	//分页显示
 	@SuppressWarnings("unchecked")
 	public List<Object> listpage(String hql, int pageNo, int pageNum) {

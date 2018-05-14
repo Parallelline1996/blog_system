@@ -1,5 +1,6 @@
 package com.blog.daoImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -40,11 +41,17 @@ public class UserDaoImpl extends HibernateUtil implements UserDao {
 		return user;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<User> allUser() {
 		String hql = "from User";
-		return (List<User>)findByHql(hql, null);
+		List<Object> temp = findByHqlGetList(hql);
+		List<User> users = new ArrayList<>();
+		User user = null;
+		for (Object t : temp) {
+			user = (User)t;
+			users.add(user);
+		}
+		return users;
 	}
 
 	@Override
@@ -85,6 +92,7 @@ public class UserDaoImpl extends HibernateUtil implements UserDao {
 			return true;
 		return false;
 	}
+	
 	@Override
 	public boolean checkPassword(String email,String password) {
 		Session session = sessionFactory.openSession();

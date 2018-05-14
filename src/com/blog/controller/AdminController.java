@@ -13,6 +13,7 @@ import com.blog.domain.User;
 import com.blog.service.AdminService;
 
 @Controller
+@RequestMapping("/admin")
 public class AdminController {
 	
 	@Autowired
@@ -20,27 +21,27 @@ public class AdminController {
 	private AdminService adminService;
 
 	// 返回所有的用户信息
+	// 这里要进行分页操作，参加参数选页数，固定每页5个data
 	@ResponseBody
-	@RequestMapping("/allusers")
+	@RequestMapping("/allUsers")
 	public List<User> allUser() {
 		return adminService.allUsers();
 	}
 	
 	// 按照id查找用户信息
 	@ResponseBody
-	@RequestMapping("/findUserByID/{userId}")//通过
+	@RequestMapping("/findUserByID/{userId}")
 	public User findUser(@PathVariable("userId") String userId) {
 		return adminService.findUserById(userId);
 	}
 
 	// 删除用户
 	@ResponseBody
-	@RequestMapping("/deleteUser/{userId}")//通过
+	@RequestMapping("/deleteUser/{userId}")
 	public int deleteUser(@PathVariable("userId") String userId) {
-		if(adminService.deleteUser(userId)==true) {
+		if (adminService.deleteUser(userId)) {
 			return 200;
-		}
-		else {
+		} else {
 			return -1;
 		}
 	}
