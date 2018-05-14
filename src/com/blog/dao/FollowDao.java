@@ -5,15 +5,15 @@ import java.util.List;
 
 public interface FollowDao {
 
-	boolean createFollow(String ownId, String userId);
+	boolean createFollow(Integer ownId, Integer userId);
 	
-	boolean deleteFollow(String ownId, String userId);
+	boolean deleteFollow(Integer ownId, Integer userId);
 	
-	List<String> visitFans(String ownId);
+	List<String> visitFans(Integer ownId);
 	
-	List<String> visitFollow(String ownId);
+	List<String> visitFollow(Integer ownId);
 	
-	int numberOfFollows(String ownId);
+	int numberOfFollows(Integer ownId);
 	
-	int numberOfFans(String ownId);
+	int numberOfFans(Integer ownId);
 }

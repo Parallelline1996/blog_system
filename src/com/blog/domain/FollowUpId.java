@@ -5,18 +5,18 @@ import java.io.Serializable;
 public class FollowUpId implements Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private String fansId;
-	private String bloggerId;
-	public String getFansId() {
+	private Integer fansId;
+	private Integer bloggerId;
+	public Integer getFansId() {
 		return fansId;
 	}
-	public void setFansId(String fansId) {
+	public void setFansId(Integer fansId) {
 		this.fansId = fansId;
 	}
-	public String getBloggerId() {
+	public Integer getBloggerId() {
 		return bloggerId;
 	}
-	public void setBloggerId(String bloggerId) {
+	public void setBloggerId(Integer bloggerId) {
 		this.bloggerId = bloggerId;
 	}
 	@Override
@@ -52,7 +52,7 @@ public class FollowUpId implements Serializable {
 			return false;
 		return true;
 	}
-	public FollowUpId(String fansId, String bloggerId) {
+	public FollowUpId(Integer fansId, Integer bloggerId) {
 		super();
 		this.fansId = fansId;
 		this.bloggerId = bloggerId;

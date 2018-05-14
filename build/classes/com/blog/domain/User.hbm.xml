@@ -6,8 +6,9 @@
 
     <class name="User" table="user">
     	
-        <id name="userId" type="java.lang.String">
+        <id name="userId" type="java.lang.Integer">
             <column name="user_ID" />
+            <generator class="identity"/>
         </id>
    
         <property name="nickName" type="java.lang.String">

@@ -27,7 +27,7 @@ public class FollowDaoImpl extends HibernateUtil implements FollowDao{
 	private UserDao userDao;
 	
 	@Override
-	public boolean createFollow(String ownId, String userId) {
+	public boolean createFollow(Integer ownId, Integer userId) {
 		// 粉丝在前，博主在后
 		FollowUpId followUpId = new FollowUpId(userId, ownId);
 		Follow follow = new Follow(followUpId);
@@ -45,7 +45,7 @@ public class FollowDaoImpl extends HibernateUtil implements FollowDao{
 	}
 
 	@Override
-	public boolean deleteFollow(String ownId, String userId) {
+	public boolean deleteFollow(Integer ownId, Integer userId) {
 		FollowUpId followUpId = new FollowUpId(userId, ownId);
 		Follow follow = new Follow(followUpId);
 		User fans = userDao.findUserById(userId);
@@ -60,7 +60,7 @@ public class FollowDaoImpl extends HibernateUtil implements FollowDao{
 	}
 
 	@Override
-	public List<String> visitFans(String ownId) {
+	public List<String> visitFans(Integer ownId) {
 		// TODO Auto-generated method stub
 		// 待完成 好像不行
 		String hql = "from FollowUpId where ownId = ?";
@@ -80,18 +80,18 @@ public class FollowDaoImpl extends HibernateUtil implements FollowDao{
 		}
 		if(res!=null)
 		 {
-
+/*
 			for(FollowUpId FollowUpId : res)
 			{
 				s.add(FollowUpId.getBloggerId());
-			}
+			}*/
 		
 		}
 		return s;
 	}
 
 	@Override
-	public List<String> visitFollow(String ownId) {
+	public List<String> visitFollow(Integer ownId) {
 		// TODO Auto-generated method stub
 		// 待完成,好像不行
 		String hql = "from FollowUpId where userId = ?";
@@ -111,24 +111,24 @@ public class FollowDaoImpl extends HibernateUtil implements FollowDao{
 		}
 		if(res!=null)
 		 {
-
+/*
 			for(FollowUpId FollowUpId : res)
 			{
 				s.add(FollowUpId.getBloggerId());
-			}
+			}*/
 		}
 		return s;
 	}
 
 	@Override
-	public int numberOfFollows(String ownId) {
+	public int numberOfFollows(Integer ownId) {
 		// TODO Auto-generated method stub
 		// 似乎这两个都没有必要
 		return 0;
 	}
 
 	@Override
-	public int numberOfFans(String ownId) {
+	public int numberOfFans(Integer ownId) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

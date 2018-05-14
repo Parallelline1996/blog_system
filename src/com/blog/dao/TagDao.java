@@ -9,7 +9,7 @@ public interface TagDao {
 	
 	boolean deleteTag(Tag tag);
 	
-	boolean setTag(String tagId, String blogId);
+	boolean setTag(Integer tagId, Integer blogId);
 	
-	Tag findTagById(String tagId);
+	Tag findTagById(Integer tagId);
 }

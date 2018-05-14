@@ -56,7 +56,7 @@ public class AdminDaoImpl extends HibernateUtil implements AdminDao {
 		return false;
 	}
 	@Override
-	public boolean checkPassword(String eMail,String password) {
+	public int checkPassword(String eMail,String password) {
 		Session session = sessionFactory.openSession();
 		String hql = "from Admin where eMail = ? and password = ?";
 		Admin admin = null;
@@ -71,8 +71,8 @@ public class AdminDaoImpl extends HibernateUtil implements AdminDao {
 			session.close();
 		}
 		// 是否存在，存在的话返回的是true
-		if (admin != null)
-			return true;
-		return false;
+		if (admin == null)
+			return -1;
+		return admin.getAdminId();
 	}
 }

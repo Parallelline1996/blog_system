@@ -9,25 +9,25 @@ public interface BlogDao {
 
 	boolean createBlog(Blog blog);
 	
-	boolean deleteBlog(String blogId);
+	boolean deleteBlog(Integer blogId);
 	
-	boolean deleteBlogToTrashBin(String blogId);
+	boolean deleteBlogToTrashBin(Integer blogId);
 	
 	boolean updateBlog(Blog blog);
 	
-	Blog findBlogById(String blogId);
+	Blog findBlogById(Integer blogId);
 	
-	boolean undoDeleteBlog(String blogId);
+	boolean undoDeleteBlog(Integer blogId);
 	
 	boolean cachBlog(Blog blog);
 	
 	List<Blog> allBlog();
 	
-	List<Blog> allBlogById(String userId);
+	List<Blog> allBlogById(Integer userId);
 	
 	List<Blog> listPageAllBlog(int pageNo, int pageNum);
 	
 	List<Blog> listPageAllBlogById(int pageNo, int pageNum);
 	
-	List<BlogList> selectTag(Blog blog, String tagId);
+	List<BlogList> selectTag(Blog blog, Integer tagId);
 }

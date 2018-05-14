@@ -2,7 +2,6 @@ package com.blog.daoImpl;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.BlockingDeque;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -31,14 +30,14 @@ public class CommentDaoImpl extends HibernateUtil implements CommentDao {
 	}
 
 	@Override
-	public boolean deleteComment(String commentId) {
+	public boolean deleteComment(Integer commentId) {
 		Comment comment = findCommentById(commentId);
 		comment.setStatus(1);
 		return save(comment);
 	}
 
 	@Override
-	public List<Comment> allCommentYouMade(String userId) {
+	public List<Comment> allCommentYouMade(Integer userId) {
 		// TODO Auto-generated method stub
 		String hql = "from Comment where userId = ? and status = 0";
 		
@@ -58,7 +57,7 @@ public class CommentDaoImpl extends HibernateUtil implements CommentDao {
 	}
 
 	@Override
-	public List<Comment> allCommentYouGet(String userId) {
+	public List<Comment> allCommentYouGet(Integer userId) {
 		// TODO Auto-generated method stub
 		String hql2 = "from Blog where userId = ?";
 		Session session2 = getSessionFactory().openSession();
@@ -96,7 +95,7 @@ public class CommentDaoImpl extends HibernateUtil implements CommentDao {
 	}
 
 	@Override
-	public Comment findCommentById(String commentId) {
+	public Comment findCommentById(Integer commentId) {
 		Session session = sessionFactory.openSession();
 		Comment comment = null;
 		try {

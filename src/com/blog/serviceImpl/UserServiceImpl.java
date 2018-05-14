@@ -1,7 +1,6 @@
 package com.blog.serviceImpl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,8 +50,7 @@ public class UserServiceImpl implements UserService {
 	private CommentDao commentDao;
 	
 	@Override
-	public int createFollow(String ownId, String userId) {
-		// TODO Auto-generated method stub
+	public int createFollow(Integer ownId, Integer userId) {
 		if(followDao.createFollow(ownId, userId))
 		{
 			return 200;
@@ -64,8 +62,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public int deleteFollow(String ownId, String userId) {
-		// TODO Auto-generated method stub
+	public int deleteFollow(Integer ownId, Integer userId) {
 		if(followDao.deleteFollow(ownId, userId))
 		{
 			return 200;
@@ -76,88 +73,80 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<UserSimpleData> visitFollows(String ownId) {
-		// TODO Auto-generated method stub
+	public List<UserSimpleData> visitFollows(Integer ownId) {
 		List<String> s = followDao.visitFollow(ownId);
 		List<UserSimpleData> u_s = new ArrayList<>();
 		if(s!=null)
-		{
+		{/*
 			for(String String: s) {
 				User u = userDao.findUserById(String);
 				u_s.add(new UserSimpleData(u.getUserId(),u.getNickName(),u.getProfile(),
 						u.getNumOfFans(),u.getNumOfAttention()));
-			}
+			}*/
 		}
 		return u_s;
 
 	}
 
 	@Override
-	public List<UserSimpleData> visitFans(String ownId) {
-		// TODO Auto-generated method stub
+	public List<UserSimpleData> visitFans(Integer ownId) {
 		List<String> s = followDao.visitFans(ownId);
 		List<UserSimpleData> u_s = new ArrayList<>();
 		if(s!=null)
 		{
 			for(String String: s) {
+				/*
 				User u = userDao.findUserById(String);
 				u_s.add(new UserSimpleData(u.getUserId(),u.getNickName(),u.getProfile(),
-						u.getNumOfFans(),u.getNumOfAttention()));
+						u.getNumOfFans(),u.getNumOfAttention()));*/
 			}
 		}
 		return u_s;
 	}
 
 	@Override
-	public int numberOfFollows(String ownId) {
-		// TODO Auto-generated method stub
+	public int numberOfFollows(Integer ownId) {
 		return userDao.findUserById(ownId).getNumOfAttention();
 	}
 
 	@Override
-	public int numberOfFans(String ownId) {
-		// TODO Auto-generated method stub
+	public int numberOfFans(Integer ownId) {
 		return userDao.findUserById(ownId).getNumOfFans();
 	}
 
 	@Override
-	public boolean agree(String userId, String blogId) {
-		// TODO Auto-generated method stub
+	public boolean agree(Integer userId, Integer blogId) {
 		return upDownDao.agree(userId, blogId);
 	}
 
 	@Override
-	public boolean disagree(String userId, String blogId) {
-		// TODO Auto-generated method stub
+	public boolean disagree(Integer userId, Integer blogId) {
 		return upDownDao.disagree(userId, blogId);
 	}
 
 	@Override
 	public boolean createTag(Tag tag) {
-		// TODO Auto-generated method stub
 		return tagDao.createTag(tag);
 	}
 
 	@Override
 	public boolean deleteTag(Tag tag) {
-		// TODO Auto-generated method stub
 		return tagDao.deleteTag(tag);
 	}
 
 	@Override
-	public boolean setTag(String tagId, String blogId) {
-		// TODO Auto-generated method stub
+	public boolean setTag(Integer tagId, Integer blogId) {
 		return tagDao.setTag(tagId, blogId);
 	}
 	
 	@Override
-	public List<BlogList> selectTag(String tagId) {
+	public List<BlogList> selectTag(Integer tagId) {
 		List<BlogList> blogLists=new ArrayList<>();
 		Set<Blog> blog = tagDao.findTagById(tagId).getBlogs();
 		if(blog!=null) {
-			for(Blog Blog:blog) {
+			for(Blog Blog:blog) {/*
 				blogLists.add(new BlogList(Blog.getBlogId(),Blog.getBlogTitle(),Blog.getNumberOfAgree(),
-						Blog.getBlogState(),Blog.getPostTime(),Blog.getUserId()));
+						Blog.getBlogState(),Blog.getPostTime(),Blog.getUserId()));*/
 			}
 		}
 		return blogLists;
@@ -165,61 +154,51 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public boolean createBlog(Blog blog) {
-		// TODO Auto-generated method stub
 		return blogDao.createBlog(blog);
 	}
 
 	@Override
-	public boolean deleteBlog(String blogId) {
-		// TODO Auto-generated method stub
+	public boolean deleteBlog(Integer blogId) {
 		return blogDao.deleteBlog(blogId);
 	}
 
 	@Override
 	public boolean updateBlog(Blog blog) {
-		// TODO Auto-generated method stub
 		return blogDao.updateBlog(blog);
 	}
 
 	@Override
-	public boolean undoDeleteBlog(String blogId) {
-		// TODO Auto-generated method stub
+	public boolean undoDeleteBlog(Integer blogId) {
 		return blogDao.undoDeleteBlog(blogId);
 	}
 
 	@Override
 	public boolean cachBlog(Blog blog) {
-		// TODO Auto-generated method stub
 		return blogDao.cachBlog(blog);
 	}
 
 	@Override
 	public boolean updateUserData(User user) {
-		// TODO Auto-generated method stub
 		return userDao.updateUserData(user);
 	}
 
 	@Override
 	public boolean createComment(Comment comment) {
-		// TODO Auto-generated method stub
 		return commentDao.createComment(comment);
 	}
 
 	@Override
-	public boolean deleteComment(String commentId) {
-		// TODO Auto-generated method stub
+	public boolean deleteComment(Integer commentId) {
 		return commentDao.deleteComment(commentId);
 	}
 
 	@Override
-	public List<Comment> allCommentYouMade(String userId) {
-		// TODO Auto-generated method stub
+	public List<Comment> allCommentYouMade(Integer userId) {
 		return commentDao.allCommentYouMade(userId);
 	}
 
 	@Override
-	public List<Comment> allCommentYouGet(String userId) {
-		// TODO Auto-generated method stub
+	public List<Comment> allCommentYouGet(Integer userId) {
 		return commentDao.allCommentYouGet(userId);
 	}
 }

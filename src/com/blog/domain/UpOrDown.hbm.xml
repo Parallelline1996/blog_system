@@ -7,10 +7,10 @@
     <class name="UpOrDown" table="up_down">
     	
         <composite-id name="UpOrDownId" class="com.blog.domain.UpOrDownId"> 
-            <key-property name="userId" type="java.lang.String">
+            <key-property name="userId" type="java.lang.Integer">
                 <column name="user_ID" />
             </key-property>
-            <key-property name="blogId" type="java.lang.String">
+            <key-property name="blogId" type="java.lang.Integer">
                 <column name="blog_ID" />
             </key-property>
         </composite-id>

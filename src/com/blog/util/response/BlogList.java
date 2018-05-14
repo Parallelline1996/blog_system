@@ -1,23 +1,20 @@
 package com.blog.util.response;
 
 import java.util.Date;
-import java.util.Set;
 
-import com.blog.domain.Tag;
-import com.blog.domain.Blog;
 public class BlogList {
-	private String blogId;
+	private Integer blogId;
 	private String blogTitle;
 	private Integer numberOfAgree;
 	private Integer blogState;
 	private Date postTime;
-	private String userId;
+	private Integer userId;
 	public BlogList() {
 		
 	}
 
-	public BlogList(String blogId, String blogTitle,Integer numberOfAgree,
-			Integer blogState, Date postTime, String userId) {
+	public BlogList(Integer blogId, String blogTitle,Integer numberOfAgree,
+			Integer blogState, Date postTime, Integer userId) {
 		super();
 		this.blogId = blogId;
 		this.blogTitle = blogTitle;
@@ -26,10 +23,10 @@ public class BlogList {
 		this.postTime = postTime;
 		this.userId = userId;
 	}
-	public String getBlogId() {
+	public Integer getBlogId() {
 		return blogId;
 	}
-	public void setBlogId(String blogId) {
+	public void setBlogId(Integer blogId) {
 		this.blogId = blogId;
 	}
 	public String getBlogTitle() {
@@ -56,10 +53,10 @@ public class BlogList {
 	public void setPostTime(Date postTime) {
 		this.postTime = postTime;
 	}
-	public String getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
-	public void setUserId(String userId) {
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
 }

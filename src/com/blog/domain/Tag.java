@@ -4,14 +4,14 @@ import java.util.Set;
 
 public class Tag {
 
-	private String tagId;
+	private Integer tagId;
 	private String userId;
 	private String tagContent;
 	private Set<Blog> blogs;
-	public String getTagId() {
+	public Integer getTagId() {
 		return tagId;
 	}
-	public void setTagId(String tagId) {
+	public void setTagId(Integer tagId) {
 		this.tagId = tagId;
 	}
 	public String getUserId() {
@@ -77,7 +77,7 @@ public class Tag {
 	public String toString() {
 		return "Tag [tagId=" + tagId + ", userId=" + userId + ", tagContent=" + tagContent + ", blogs=" + blogs + "]";
 	}
-	public Tag(String tagId, String userId, String tagContent, Set<Blog> blogs) {
+	public Tag(Integer tagId, String userId, String tagContent, Set<Blog> blogs) {
 		super();
 		this.tagId = tagId;
 		this.userId = userId;

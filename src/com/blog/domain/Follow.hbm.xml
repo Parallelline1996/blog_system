@@ -7,10 +7,10 @@
     <class name="Follow" table="follow_up">
     	
         <composite-id name="FollowUpId" class="com.blog.domain.FollowUpId"> 
-            <key-property name="fansId" type="java.lang.String">
+            <key-property name="fansId" type="java.lang.Integer">
                 <column name="fans_ID" />
             </key-property>
-            <key-property name="bloggerId" type="java.lang.String">
+            <key-property name="bloggerId" type="java.lang.Integer">
                 <column name="blogger_ID" />
             </key-property>
         </composite-id>

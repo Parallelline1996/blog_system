@@ -8,18 +8,17 @@ public interface UserDao {
 
 	boolean createUser(User user);
 	
-	User findUserById(String userId);
+	User findUserById(Integer userId);
 	
 	List<User> allUser();
 	
-	boolean deleteUser(String userId);
+	List<User> allUserByPage(int page);
+	
+	boolean deleteUser(Integer userId);
 	
 	boolean updateUserData(User user);
 	
-	// 用于创建新的对象时，查看数据库的情况并生成id
-	int newUserNumber();
-	
 	boolean accountExist(String account);
 	
-	boolean checkPassword(String email,String password);
+	int checkPassword(String email,String password);
 }

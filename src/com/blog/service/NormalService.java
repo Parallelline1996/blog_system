@@ -9,5 +9,5 @@ public interface NormalService {
 
 	List<BlogList> readBlog();
 	
-	Blog findBlogById(String blogId);
+	Blog findBlogById(Integer blogId);
 }

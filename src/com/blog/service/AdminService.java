@@ -7,8 +7,10 @@ import com.blog.domain.User;
 public interface AdminService {
 
 	List<User> allUsers();
-
-	User findUserById(String userId);
 	
-	boolean deleteUser(String userId);
+	List<User> allUserByPage(int page);
+
+	User findUserById(Integer userId);
+	
+	boolean deleteUser(Integer userId);
 }

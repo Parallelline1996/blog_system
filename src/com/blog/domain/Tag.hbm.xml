@@ -6,7 +6,7 @@
 
     <class name="Tag" table="tag">
     	
-        <id name="tagId" type="java.lang.String">
+        <id name="tagId" type="java.lang.Integer">
             <column name="tag_ID" />
             <generator class="identity"/>
         </id>

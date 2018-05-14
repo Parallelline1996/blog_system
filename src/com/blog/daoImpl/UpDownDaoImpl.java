@@ -9,8 +9,6 @@ import org.springframework.stereotype.Repository;
 import com.blog.dao.UpDownDao;
 import com.blog.dao.UserDao;
 import com.blog.dao.BlogDao;
-import com.blog.domain.Follow;
-import com.blog.domain.FollowUpId;
 import com.blog.domain.User;
 import com.blog.domain.Blog;
 import com.blog.util.HibernateUtil;
@@ -35,7 +33,7 @@ public class UpDownDaoImpl extends HibernateUtil implements UpDownDao{
 	
 	//这三个函数搞不懂是怎么回事
 	@Override
-	public int upOrDown(String userId, String blogId) {
+	public int upOrDown(Integer userId, Integer blogId) {
 		// TODO Auto-generated method stub
 		Session session = sessionFactory.openSession();
 		String hql = "from UpOrDownId where userId = ? and blogId = ? ";
@@ -57,7 +55,7 @@ public class UpDownDaoImpl extends HibernateUtil implements UpDownDao{
 	}
 
 	@Override
-	public boolean agree(String userId, String blogId) {
+	public boolean agree(Integer userId, Integer blogId) {
 		UpOrDownId upOrDownId = new UpOrDownId(userId, blogId);
 		UpOrDown upOrDown = new UpOrDown(upOrDownId,0);
 		Blog blogger = blogDao.findBlogById(blogId);
@@ -68,7 +66,7 @@ public class UpDownDaoImpl extends HibernateUtil implements UpDownDao{
 	}
 
 	@Override
-	public boolean disagree(String userId, String blogId) {
+	public boolean disagree(Integer userId, Integer blogId) {
 		// TODO Auto-generated method stub
 		UpOrDownId upOrDownId = new UpOrDownId(userId, blogId);
 		UpOrDown upOrDown = new UpOrDown(upOrDownId,1);

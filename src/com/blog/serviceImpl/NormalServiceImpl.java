@@ -31,14 +31,13 @@ public class NormalServiceImpl implements NormalService {
 	
 	@Override
 	public List<BlogList> readBlog() {
-		// TODO Auto-generated method stub
 		// 注意这里要完成转换，from blog to blogList
 		List<Blog> blogs = blogDao.allBlog();
 		List<BlogList> bloglist =  new ArrayList<>();
 		try {
-			for(Blog Blog : blogs) {
+			for(Blog Blog : blogs) {/*
 				bloglist.add(new BlogList(Blog.getBlogId(),Blog.getBlogTitle(),Blog.getNumberOfAgree(),
-					Blog.getBlogState(),Blog.getPostTime(),Blog.getUserId()));
+					Blog.getBlogState(),Blog.getPostTime(),Blog.getUserId()));*/
 			}
 		}catch (NullPointerException e) {
 			bloglist = null;
@@ -48,8 +47,7 @@ public class NormalServiceImpl implements NormalService {
 	}
 
 	@Override
-	public Blog findBlogById(String blogId) {
-		// TODO Auto-generated method stub
+	public Blog findBlogById(Integer blogId) {
 		return blogDao.findBlogById(blogId);
 	}
 

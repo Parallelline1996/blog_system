@@ -25,7 +25,7 @@ public class UserController {
 	@Autowired
 	@Qualifier("userServiceImpl")
 	private UserService userService;
-	
+	/*
 	// 关注
 	@ResponseBody
 	@RequestMapping("/createFollow")
@@ -251,5 +251,5 @@ public class UserController {
 	@RequestMapping("/allCommentYouGet/{userId}")//不通过
 	public List<Comment> allCommentYouGet(@PathVariable("userId")  String userId) {
 		return userService.allCommentYouGet(userId);
-	}
+	}*/
 }

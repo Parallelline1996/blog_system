@@ -37,7 +37,7 @@ public class TagDaoImpl extends HibernateUtil implements TagDao {
 	}
 
 	@Override
-	public boolean setTag(String tagId, String blogId) {
+	public boolean setTag(Integer tagId, Integer blogId) {
 		Blog blog = blogDao.findBlogById(blogId);
 		if(blog!=null) {
 			Set<Tag> temp = blog.getTags();
@@ -52,7 +52,7 @@ public class TagDaoImpl extends HibernateUtil implements TagDao {
 	}
 
 	@Override
-	public Tag findTagById(String tagId) {
+	public Tag findTagById(Integer tagId) {
 		Session session = sessionFactory.openSession();
 		Tag tag = null;
 		try {

@@ -8,5 +8,5 @@ public interface AdminDao {
 	
 	boolean adminExist(String account);
 	
-	boolean checkPassword(String email,String password);
+	int checkPassword(String email,String password);
 }

@@ -135,7 +135,7 @@ public class HibernateUtil {
 		return query.list();
 	}
 	
-	//分页显示
+	// 分页显示
 	@SuppressWarnings("unchecked")
 	public List<Object> listpage(String hql, int pageNo, int pageNum) {
 		Session session = sessionFactory.openSession();

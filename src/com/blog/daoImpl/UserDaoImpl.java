@@ -28,7 +28,7 @@ public class UserDaoImpl extends HibernateUtil implements UserDao {
 	}
 
 	@Override
-	public User findUserById(String userId) {
+	public User findUserById(Integer userId) {
 		Session session = sessionFactory.openSession();
 		User user = null;
 		try {
@@ -43,19 +43,30 @@ public class UserDaoImpl extends HibernateUtil implements UserDao {
 
 	@Override
 	public List<User> allUser() {
-		String hql = "from User";
+		// 0表示可用
+		String hql = "from User where u_status = 0";
 		List<Object> temp = findByHqlGetList(hql);
 		List<User> users = new ArrayList<>();
-		User user = null;
 		for (Object t : temp) {
-			user = (User)t;
-			users.add(user);
+			users.add((User)t);
 		}
 		return users;
 	}
 
 	@Override
-	public boolean deleteUser(String userId) {
+	public List<User> allUserByPage(int page) {
+		String hql = "from User where u_status = 0";
+		// 中间参数是第几页的意思
+		List<Object> temp = listpage(hql, page, 5);
+		List<User> users = new ArrayList<>();
+		for (Object t : temp) {
+			users.add((User)t);
+		}
+		return users;
+	}
+	
+	@Override
+	public boolean deleteUser(Integer userId) {
 		User user = findUserById(userId);
 		user.setStatus(1);
 		return save(user);
@@ -65,14 +76,9 @@ public class UserDaoImpl extends HibernateUtil implements UserDao {
 	public boolean updateUserData(User user) {
 		return update(user);
 	}
-
+	
 	@Override
-	public int newUserNumber() {
-		// 似乎，不需要用。。暂时不写
-		return 0;
-	}
-	@Override
-	public boolean accountExist(String account) {
+	public boolean accountExist(String eMail) {
 		//测试通过
 		Session session = sessionFactory.openSession();
 		String hql = "from User where eMail = ? and status = ? ";
@@ -80,7 +86,7 @@ public class UserDaoImpl extends HibernateUtil implements UserDao {
 		try {
 			// 当确定返回值为1个或null时，使用uniqueResult
 			user = (User)session.createQuery(hql)
-					.setParameter(0, account).setParameter(1, 0)
+					.setParameter(0, eMail).setParameter(1, 0)
 					.uniqueResult();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -94,7 +100,7 @@ public class UserDaoImpl extends HibernateUtil implements UserDao {
 	}
 	
 	@Override
-	public boolean checkPassword(String email,String password) {
+	public int checkPassword(String email,String password) {
 		Session session = sessionFactory.openSession();
 		String hql = "from User where  password = ? and eMail = ?";
 		User user = null;
@@ -109,9 +115,9 @@ public class UserDaoImpl extends HibernateUtil implements UserDao {
 			session.close();
 		}
 		// 是否存在，存在的话返回的是true
-		if (user != null)
-			return true;
-		return false;
+		if (user == null)
+			return -1;
+		return user.getUserId();
 	}
 
 }

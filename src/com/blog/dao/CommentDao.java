@@ -8,11 +8,11 @@ public interface CommentDao {
 	
 	boolean createComment(Comment comment);
 	
-	boolean deleteComment(String commentId);
+	boolean deleteComment(Integer commentId);
 	
-	List<Comment> allCommentYouMade(String userId);
+	List<Comment> allCommentYouMade(Integer userId);
 	
-	List<Comment> allCommentYouGet(String userId);
+	List<Comment> allCommentYouGet(Integer userId);
 	
-	Comment findCommentById(String commentId);
+	Comment findCommentById(Integer commentId);
 }

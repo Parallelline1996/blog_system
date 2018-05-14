@@ -2,9 +2,9 @@ package com.blog.dao;
 
 public interface UpDownDao {
 	
-	int upOrDown(String userId, String blogId);
+	int upOrDown(Integer userId, Integer blogId);
 	
-	boolean agree(String userId, String blogId);
+	boolean agree(Integer userId, Integer blogId);
 	
-	boolean disagree(String userId, String blogId);
+	boolean disagree(Integer userId, Integer blogId);
 }

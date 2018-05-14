@@ -32,14 +32,14 @@ public class BlogDaoImpl extends HibernateUtil implements BlogDao {
 	}
 
 	@Override
-	public boolean deleteBlog(String blogId) {
+	public boolean deleteBlog(Integer blogId) {
 		Blog blog = findBlogById(blogId);
 		blog.setBlogState(2);
 		return save(blog);
 	}
 
 	@Override
-	public boolean deleteBlogToTrashBin(String blogId) {
+	public boolean deleteBlogToTrashBin(Integer blogId) {
 		Blog blog = findBlogById(blogId);
 		// blogState: 0->正常  1->垃圾箱  2->彻底删除 
 		blog.setBlogState(1);
@@ -52,7 +52,7 @@ public class BlogDaoImpl extends HibernateUtil implements BlogDao {
 	}
 
 	@Override
-	public Blog findBlogById(String blogId) {
+	public Blog findBlogById(Integer blogId) {
 		Blog blog = null;
 		Session session = sessionFactory.openSession();
 		//Transaction transaction = session.beginTransaction();
@@ -69,7 +69,7 @@ public class BlogDaoImpl extends HibernateUtil implements BlogDao {
 	}
 
 	@Override
-	public boolean undoDeleteBlog(String blogId) {
+	public boolean undoDeleteBlog(Integer blogId) {
 		Blog blog = findBlogById(blogId);
 		blog.setBlogState(0);
 		return save(blog);
@@ -107,7 +107,7 @@ public class BlogDaoImpl extends HibernateUtil implements BlogDao {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<Blog> allBlogById(String userId) {
+	public List<Blog> allBlogById(Integer userId) {
 		// 未被检验
 		String hql = "from Blog as b where b.id  = 'userId'";
 		return (List<Blog>) findByHql(hql, null);
@@ -133,7 +133,7 @@ public class BlogDaoImpl extends HibernateUtil implements BlogDao {
 	}
 
 	@Override
-	public List<BlogList> selectTag(Blog blog, String tagId) {
+	public List<BlogList> selectTag(Blog blog, Integer tagId) {
 		// 暂时跳过
 		return null;
 	}

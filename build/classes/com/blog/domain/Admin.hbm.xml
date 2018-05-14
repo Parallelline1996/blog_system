@@ -6,8 +6,9 @@
 
     <class name="Admin" table="adminisitrator">
     
-        <id name="adminId" type="java.lang.String">
+        <id name="adminId" type="java.lang.Integer">
             <column name="a_ID" />
+            <generator class="identity"/>
         </id>
    
         <property name="eMail" type="java.lang.String">

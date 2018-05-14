@@ -7,7 +7,7 @@
 	
     <class name="Comment" table="comment">
     	
-        <id name="commentId" type="java.lang.String">
+        <id name="commentId" type="java.lang.Integer">
             <column name="comment_ID" />
             <!-- 实现自增 -->
             <generator class="identity"/>

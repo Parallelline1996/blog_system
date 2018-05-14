@@ -9,7 +9,6 @@ import com.blog.dao.AdminDao;
 import com.blog.dao.UserDao;
 import com.blog.domain.User;
 import com.blog.service.AccountService;
-import com.blog.util.request.CreateUserData;
 import com.blog.util.request.LoginData;
 
 @Service
@@ -24,47 +23,58 @@ public class AccountServiceImpl implements AccountService {
 	@Qualifier("adminDaoImpl")
 	private AdminDao adminDao;
 	
-	@Override
-	public int createUser(CreateUserData data) {
-		return createUser(data);
-	}
-	
 	// 测试用，未完成
-	public int createUser_(User user) {
-		if (userDao.createUser(user))
-			return 200;
-		else {
-			return 0;
+	@Override
+	public int createUser(User user) {
+		if (userDao.accountExist(user.geteMail())) {
+			// 邮箱已经被注册
+			return -1;
+		} else {
+			user.setStatus(0);
+			user.setNumOfAttention(0);
+			user.setNumOfFans(0);
+			// 照片这里暂时不处理，等待处理
+			user.setProfile(null);
+			if (userDao.createUser(user)) {
+				return 200;
+			} else {
+				// 系统异常
+				return -2;
+			}
 		}
 	}
 
 	@Override
 	public int login(@RequestBody LoginData data) {
-		// TODO Auto-generated method stub
-		// 返回2代表是管理员账号，1代表普通用户
-		//0代表用户不存在账号被封禁,-1代表用户密码错误，-2代表管理员密码错误。
-
-		if(userDao.accountExist(data.getEmail())) {//通过
-			if(userDao.checkPassword(data.getEmail(), data.getPassword())) {//通过
-				return 1;
+		int code = data.getCode();
+		// 代表是普通用户
+		if (code == 1) {
+			if(userDao.accountExist(data.getEmail())) {
+				int temp = userDao.checkPassword(data.getEmail(), data.getPassword());
+				if (temp > 0) {
+					return temp;
+				} else {
+					// -2表示密码错误
+					return -2;
+				}
+			} else {
+				// -1代表账号不存在
+				return -1;
 			}
-			else {
+		} else {
+			if (adminDao.adminExist(data.getEmail())) {
+				int temp = adminDao.checkPassword(data.getEmail(), data.getPassword());
+				if (temp > 0) {
+					return temp;
+				} else {
+					// -2表示密码错误
+					return -2;
+				}
+			} else {
+				// -1代表账号不存在
 				return -1;
 			}
 		}
-
-		else if(adminDao.adminExist(data.getEmail())){//测试不通过
-			if(adminDao.checkPassword(data.getEmail(), data.getPassword())){//测试不通过
-				return 2;
-			}
-			else {
-				return -2;
-			}
-		}
-		else {
-			return 0;
-		}
-
 	}
 
 }
