@@ -51,57 +51,56 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public int createFollow(Integer ownId, Integer userId) {
-		if(followDao.createFollow(ownId, userId))
-		{
-			return 200;
-		}
-		else {
+		if (followDao.existFollow(ownId, userId)) {
+			// -1 代表已经关注
 			return -1;
+		} else if (followDao.createFollow(ownId, userId)) {
+			return 200;
+		} else {
+			// -2 代表系统异常
+			return -2;
 		}
 
 	}
 
 	@Override
 	public int deleteFollow(Integer ownId, Integer userId) {
-		if(followDao.deleteFollow(ownId, userId))
-		{
-			return 200;
-		}
-		else {
+		if (!followDao.existFollow(ownId, userId)) {
+			// 表示并未关注
 			return -1;
+		} else if (followDao.deleteFollow(ownId, userId)) {
+			return 200;
+		} else {
+			// 表示系统异常
+			return -2;
 		}
 	}
 
 	@Override
 	public List<UserSimpleData> visitFollows(Integer ownId) {
-		List<String> s = followDao.visitFollow(ownId);
-		List<UserSimpleData> u_s = new ArrayList<>();
-		if(s!=null)
-		{/*
-			for(String String: s) {
-				User u = userDao.findUserById(String);
-				u_s.add(new UserSimpleData(u.getUserId(),u.getNickName(),u.getProfile(),
-						u.getNumOfFans(),u.getNumOfAttention()));
-			}*/
+		List<Integer> s = followDao.visitFollow(ownId);
+		List<UserSimpleData> UserData = new ArrayList<>();
+		if (s != null) {
+			for (Integer integer : s) {
+				User user = userDao.findUserById(integer);
+				UserData.add(new UserSimpleData(integer, user.getNickName(), user.getProfile(), user.getNumOfFans(), user.getNumOfAttention()));
+			}
 		}
-		return u_s;
+		return UserData;
 
 	}
 
 	@Override
 	public List<UserSimpleData> visitFans(Integer ownId) {
-		List<String> s = followDao.visitFans(ownId);
-		List<UserSimpleData> u_s = new ArrayList<>();
-		if(s!=null)
-		{
-			for(String String: s) {
-				/*
-				User u = userDao.findUserById(String);
-				u_s.add(new UserSimpleData(u.getUserId(),u.getNickName(),u.getProfile(),
-						u.getNumOfFans(),u.getNumOfAttention()));*/
+		List<Integer> s = followDao.visitFans(ownId);
+		List<UserSimpleData> UserData = new ArrayList<>();
+		if (s != null) {
+			for (Integer integer : s) {
+				User user = userDao.findUserById(integer);
+				UserData.add(new UserSimpleData(integer, user.getNickName(), user.getProfile(), user.getNumOfFans(), user.getNumOfAttention()));
 			}
 		}
-		return u_s;
+		return UserData;
 	}
 
 	@Override

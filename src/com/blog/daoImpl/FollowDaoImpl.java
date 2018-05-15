@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -12,7 +13,6 @@ import org.springframework.stereotype.Repository;
 
 import com.blog.dao.FollowDao;
 import com.blog.dao.UserDao;
-import com.blog.domain.Blog;
 import com.blog.domain.Follow;
 import com.blog.domain.FollowUpId;
 import com.blog.domain.User;
@@ -26,6 +26,10 @@ public class FollowDaoImpl extends HibernateUtil implements FollowDao{
 	@Qualifier("userDaoImpl")
 	private UserDao userDao;
 	
+	@Autowired
+	@Qualifier("sessionFactory")
+	private SessionFactory sessionFactory;
+	
 	@Override
 	public boolean createFollow(Integer ownId, Integer userId) {
 		// 粉丝在前，博主在后
@@ -33,15 +37,28 @@ public class FollowDaoImpl extends HibernateUtil implements FollowDao{
 		Follow follow = new Follow(followUpId);
 		User fans = userDao.findUserById(userId);
 		User blogger = userDao.findUserById(ownId);
-		if(fans!=null){
+		if (fans == null || blogger == null) {
+			return false;
+		}
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		boolean temp = false;
+		try {
+			// 关注时，加入follow_up表，并更改对应用户的粉丝数和关注人数
 			fans.setNumOfAttention(fans.getNumOfAttention() + 1);
-			
-		}
-		if(blogger!=null) {
 			blogger.setNumOfFans(blogger.getNumOfFans() + 1);
-			
+			userDao.updateUserData(fans);
+			userDao.updateUserData(blogger);
+			save(follow);
+			temp = true;
+			tx.commit();
+		} catch (Exception e) {
+			tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
 		}
-		return save(follow);
+		return temp;
 	}
 
 	@Override
@@ -50,26 +67,57 @@ public class FollowDaoImpl extends HibernateUtil implements FollowDao{
 		Follow follow = new Follow(followUpId);
 		User fans = userDao.findUserById(userId);
 		User blogger = userDao.findUserById(ownId);
-		if(fans!=null){
+		if (fans == null || blogger == null) {
+			return false;
+		}
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		boolean temp = false;
+		try {
+			// 取消关注时，从follow_up去除，并更改对应用户的粉丝数和关注人数
 			fans.setNumOfAttention(fans.getNumOfAttention() - 1);
-		}
-		if(blogger!=null) {
 			blogger.setNumOfFans(blogger.getNumOfFans() - 1);
+			userDao.updateUserData(fans);
+			userDao.updateUserData(blogger);
+			delete(follow);
+			temp = true;
+			tx.commit();
+		} catch (Exception e) {
+			tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
 		}
-		return delete(follow);
+		return temp;
 	}
 
+	// 判断是否已经关注了
 	@Override
-	public List<String> visitFans(Integer ownId) {
-		// TODO Auto-generated method stub
-		// 待完成 好像不行
-		String hql = "from FollowUpId where ownId = ?";
-		
+	public boolean existFollow(Integer ownId, Integer userId) {
+		String hql = "from Follow where blogger_ID = ? and fans_ID = ?";
+		Session session = sessionFactory.openSession();
+		Follow follow = null;
+		try {
+			follow = (Follow)session.createQuery(hql).setParameter(0, ownId)
+					.setParameter(1, userId).uniqueResult();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		if (follow == null)
+			return false;
+		return true;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Integer> visitFans(Integer ownId) {
+		String hql = "from Follow where blogger_ID = ?";
 		Session session = getSessionFactory().openSession();
-		Transaction tx = session.beginTransaction();
-		List<FollowUpId> res = null;
-		List<String> s = null;
+		List<Object> res = null;
 		Query query = null;
+		List<Integer> s = new ArrayList<>();
 		try {
 			query = session.createQuery(hql).setParameter(0, ownId);
 			res = query.list();
@@ -78,29 +126,23 @@ public class FollowDaoImpl extends HibernateUtil implements FollowDao{
 		}finally{
 			session.close();
 		}
-		if(res!=null)
-		 {
-/*
-			for(FollowUpId FollowUpId : res)
-			{
-				s.add(FollowUpId.getBloggerId());
-			}*/
-		
+		if (res != null) {
+			for (Object object : res) {
+				Follow follow = (Follow)object;
+				s.add(follow.getFollowUpId().getFansId());
+			}
 		}
 		return s;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public List<String> visitFollow(Integer ownId) {
-		// TODO Auto-generated method stub
-		// 待完成,好像不行
-		String hql = "from FollowUpId where userId = ?";
-		
+	public List<Integer> visitFollow(Integer ownId) {
+		String hql = "from Follow where fans_ID = ?";
 		Session session = getSessionFactory().openSession();
-		Transaction tx = session.beginTransaction();
-		List<FollowUpId> res = null;
-		List<String> s = null;
+		List<Object> res = null;
 		Query query = null;
+		List<Integer> s = new ArrayList<>();
 		try {
 			query = session.createQuery(hql).setParameter(0, ownId);
 			res = query.list();
@@ -109,28 +151,12 @@ public class FollowDaoImpl extends HibernateUtil implements FollowDao{
 		}finally{
 			session.close();
 		}
-		if(res!=null)
-		 {
-/*
-			for(FollowUpId FollowUpId : res)
-			{
-				s.add(FollowUpId.getBloggerId());
-			}*/
+		if (res != null) {
+			for (Object object : res) {
+				Follow follow = (Follow)object;
+				s.add(follow.getFollowUpId().getBloggerId());
+			}
 		}
 		return s;
 	}
-
-	@Override
-	public int numberOfFollows(Integer ownId) {
-		// TODO Auto-generated method stub
-		// 似乎这两个都没有必要
-		return 0;
-	}
-
-	@Override
-	public int numberOfFans(Integer ownId) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 }

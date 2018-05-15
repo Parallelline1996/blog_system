@@ -45,7 +45,7 @@ public class NormalController {
 	public int login(@RequestBody LoginData data, HttpServletRequest request) {
 		// 未完成，当登陆成功时，应记录登陆用户的类型 + 编号
 		HttpSession session = request.getSession();
-		session.setAttribute("", "");
+		session.setAttribute("userId", 1);
 		session.setAttribute("", "");
 		return accountService.login(data);
 	}

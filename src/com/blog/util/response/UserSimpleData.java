@@ -1,21 +1,19 @@
 package com.blog.util.response;
 
 import java.sql.Blob;
-import java.util.Date;
 
 public class UserSimpleData {
-	private String userId;
+	private Integer userId;
 	private String nickName;
 	private Blob profile;
 	private Integer numOfFans;
 	private Integer NumOfAttention;
 	public UserSimpleData() {
-		// TODO Auto-generated constructor stub
 	}
-	public String getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
-	public UserSimpleData(String userId, String nickName,Blob  profile,
+	public UserSimpleData(Integer userId, String nickName,Blob  profile,
 			Integer numOfFans,Integer NumOfAttention) {
 		super();
 		this.userId = userId;
@@ -25,7 +23,7 @@ public class UserSimpleData {
 		this.NumOfAttention = NumOfAttention;
 
 	}
-	public void setUserId(String userId) {
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
 	public String getNickName() {

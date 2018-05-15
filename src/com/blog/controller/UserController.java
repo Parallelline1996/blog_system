@@ -2,12 +2,15 @@ package com.blog.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.blog.domain.Blog;
@@ -25,55 +28,67 @@ public class UserController {
 	@Autowired
 	@Qualifier("userServiceImpl")
 	private UserService userService;
-	/*
+	
 	// 关注
 	@ResponseBody
-	@RequestMapping("/createFollow")
-	public int createFollow(@RequestBody String ownId, String userId) {//不通过
+	@RequestMapping(value = "/createFollow/{userId}", method = RequestMethod.GET)
+	public int createFollow(@PathVariable("userId") Integer userId, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		Integer ownId = (Integer)session.getAttribute("userId");
+		if (ownId == null) {
+			return 404;
+		}
 		return userService.createFollow(ownId, userId); 
-		//return 100;
 	}
 	
 	// 取消关注
 	@ResponseBody
-	@RequestMapping("/deleteFollow")
-	public int deleteFollow(@RequestBody String ownId, String userId) {//不通过
+	@RequestMapping(value = "/deleteFollow/{userId}", method = RequestMethod.GET)
+	public int deleteFollow(@PathVariable("userId") Integer userId, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		Integer ownId = (Integer)session.getAttribute("userId");
+		if (ownId == null) {
+			return 404;
+		}
 		return userService.deleteFollow(ownId, userId);
-		//return 100;
 	}
 	
 	// 查看关注人的列表
 	@ResponseBody
-	@RequestMapping("/visitFollows/{ownId}")
-	public List<UserSimpleData> visitFollows(@PathVariable("ownId") String ownId) {//不通过
+	@RequestMapping(value = "/visitFollows", method = RequestMethod.GET)
+	public List<UserSimpleData> visitFollows(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		Integer ownId = (Integer)session.getAttribute("userId");
 		return userService.visitFollows(ownId);
-		//return null;
 	}
 	
 	// 查看粉丝的列表
 	@ResponseBody
-	@RequestMapping("/visitFans/{ownId}")
-	public List<UserSimpleData> visitFans(@PathVariable("ownId") String ownId) {//不通过
+	@RequestMapping(value = "/visitFans", method = RequestMethod.GET)
+	public List<UserSimpleData> visitFans(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		Integer ownId = (Integer)session.getAttribute("userId");
 		return userService.visitFans(ownId);
-		//return null;
 	}
 	
 	// 查看已关注人的总数
 	@ResponseBody
-	@RequestMapping("/numberOfFollows/{ownId}")
-	public int numberOfFollows(@PathVariable("ownId") String ownId) {//通过
+	@RequestMapping(value = "/numberOfFollows", method = RequestMethod.GET)
+	public int numberOfFollows(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		Integer ownId = (Integer)session.getAttribute("userId");
 		return userService.numberOfFollows(ownId);
-		//return 0;
 	}
 	
 	// 查看粉丝的总数
 	@ResponseBody
-	@RequestMapping("/numberOfFans/{ownId}")
-	public int numberOfFans(@PathVariable("ownId") String ownId) {//通过
+	@RequestMapping(value = "/numberOfFans", method = RequestMethod.GET)
+	public int numberOfFans(HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		Integer ownId = (Integer)session.getAttribute("userId");
 		return userService.numberOfFans(ownId);
-		//return 0;
 	}
-	
+	/*
 	// 创建标签
 	@ResponseBody
 	@RequestMapping("/createTag")

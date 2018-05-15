@@ -9,11 +9,9 @@ public interface FollowDao {
 	
 	boolean deleteFollow(Integer ownId, Integer userId);
 	
-	List<String> visitFans(Integer ownId);
+	boolean existFollow(Integer ownId, Integer userId);
 	
-	List<String> visitFollow(Integer ownId);
+	List<Integer> visitFans(Integer ownId);
 	
-	int numberOfFollows(Integer ownId);
-	
-	int numberOfFans(Integer ownId);
+	List<Integer> visitFollow(Integer ownId);
 }
