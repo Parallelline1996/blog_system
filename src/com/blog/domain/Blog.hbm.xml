@@ -39,11 +39,11 @@
             <column name="last_modified_time" />
         </property>
         
-        <property name="userId" type="java.lang.String">
+        <property name="userId" type="java.lang.Integer">
             <column name="user_ID" />
         </property>
         
-        <set name="tags" table="blog_tag">
+        <set name="tags" table="blog_tag" lazy="false">
         	<!-- 当前类在中间表中的外键 -->
             <key column="blogId" />
             <many-to-many class="com.blog.domain.Tag" column="tagId"/>

@@ -2,6 +2,7 @@ package com.blog.serviceImpl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -11,7 +12,9 @@ import com.blog.dao.BlogDao;
 import com.blog.dao.CommentDao;
 import com.blog.dao.UpDownDao;
 import com.blog.domain.Blog;
+import com.blog.domain.Tag;
 import com.blog.service.NormalService;
+import com.blog.util.response.BlogData;
 import com.blog.util.response.BlogList;
 @Service
 @Qualifier("normalServiceImpl")
@@ -31,25 +34,52 @@ public class NormalServiceImpl implements NormalService {
 	
 	@Override
 	public List<BlogList> readBlog() {
-		// 注意这里要完成转换，from blog to blogList
 		List<Blog> blogs = blogDao.allBlog();
 		List<BlogList> bloglist =  new ArrayList<>();
+		// 将 Blog 列表转为 BlogList
 		try {
-			for(Blog Blog : blogs) {/*
-				bloglist.add(new BlogList(Blog.getBlogId(),Blog.getBlogTitle(),Blog.getNumberOfAgree(),
-					Blog.getBlogState(),Blog.getPostTime(),Blog.getUserId()));*/
+			for(Blog blog : blogs) {
+				bloglist.add(new BlogList(blog.getBlogId(), blog.getBlogTitle(), 
+						blog.getNumberOfAgree(), blog.getBlogState(), blog.getPostTime(), blog.getUserId()));
 			}
 		}catch (NullPointerException e) {
 			bloglist = null;
-			// TODO: handle exception
+		}
+		return bloglist; 
+	}
+
+	
+	// 对上面的功能进行分页处理
+	@Override
+	public List<BlogList> readBlogByPage(int page) {
+		List<Blog> blogs = blogDao.allBlogByPage(page);
+		List<BlogList> bloglist =  new ArrayList<>();
+		try {
+			for(Blog blog : blogs) {
+				bloglist.add(new BlogList(blog.getBlogId(), blog.getBlogTitle(), 
+						blog.getNumberOfAgree(), blog.getBlogState(), blog.getPostTime(), blog.getUserId()));
+			}
+		}catch (NullPointerException e) {
+			bloglist = null;
 		}
 		return bloglist; 
 	}
 
 	@Override
-	public Blog findBlogById(Integer blogId) {
-		return blogDao.findBlogById(blogId);
+	public BlogData findBlogById(Integer blogId) {
+		Blog blog = blogDao.findBlogById(blogId);
+		Set<Tag> set = blog.getTags();
+		List<String> seTags = new ArrayList<>();
+		// 将 set 中的标签内容进行转换
+		for (Tag tag : set) {
+			System.out.println(tag.getTagContent());
+			seTags.add(tag.getTagContent());
+		}
+		BlogData data = new BlogData(blog.getBlogId(), blog.getBlogTitle(), blog.getBlogContent(), blog.getNumberOfAgree(), blog.getNumberOfDisagree(),
+				blog.getBlogState(), blog.getPostTime(), blog.getLastModifiedTime(), blog.getUserId(), seTags);
+		return data;
 	}
+
 
 
 }

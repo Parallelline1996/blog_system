@@ -23,6 +23,8 @@ public interface BlogDao {
 	
 	List<Blog> allBlog();
 	
+	List<Blog> allBlogByPage(int page);
+	
 	List<Blog> allBlogById(Integer userId);
 	
 	List<Blog> listPageAllBlog(int pageNo, int pageNum);

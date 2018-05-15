@@ -1,19 +1,19 @@
 package com.blog.daoImpl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import com.blog.dao.BlogDao;
 import com.blog.domain.Blog;
-import com.blog.domain.User;
 import com.blog.util.HibernateUtil;
 import com.blog.util.response.BlogList;
 
@@ -64,7 +64,25 @@ public class BlogDaoImpl extends HibernateUtil implements BlogDao {
 			//transaction.rollback();
 		} finally {
 			session.close();
+		}/*
+		String hql = "select tag.tagId from blog_tag where blogId = ?";
+		Query query = null;
+		try {
+			session = sessionFactory.openSession();
+			query = session.createQuery(hql).setParameter(0, blogId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
 		}
+		Set<Integer> temp = new HashSet<>();
+		if (query != null) {
+			List<Object> o = query.list();
+			for (Object object : o) {
+				temp.add((Integer)object);
+			}
+		}*/
+		
 		return blog;
 	}
 
@@ -85,10 +103,9 @@ public class BlogDaoImpl extends HibernateUtil implements BlogDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Blog> allBlog() {
-		String hql = "from Blog";
+		String hql = "from Blog where b_status = 0";
 		
 		Session session = getSessionFactory().openSession();
-		Transaction tx = session.beginTransaction();
 		List<Blog> res = null;
 		Query query = null;
 		try {
@@ -101,10 +118,20 @@ public class BlogDaoImpl extends HibernateUtil implements BlogDao {
 		}
 		
 		return res;
-		//String hql = "from Blog";
-		//return (List<Blog>) findByHql(hql, null);
 	}
 
+	@Override
+	public List<Blog> allBlogByPage(int page){
+		String hql = "from Blog where b_status = 0";
+		List<Blog> blogs = new ArrayList<>();
+		List<Object> temp = listpage(hql, page, 5);
+		for (Object object : temp) {
+			blogs.add((Blog)object);
+		}
+		return blogs;
+	}
+	
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Blog> allBlogById(Integer userId) {

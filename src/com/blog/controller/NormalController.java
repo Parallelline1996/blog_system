@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.blog.domain.Blog;
 import com.blog.domain.User;
 import com.blog.service.AccountService;
 import com.blog.service.NormalService;
 import com.blog.util.request.LoginData;
+import com.blog.util.response.BlogData;
 import com.blog.util.response.BlogList;
 
 @Controller
@@ -54,14 +54,20 @@ public class NormalController {
 	@ResponseBody
 	@RequestMapping(value = "/showBlog", method = RequestMethod.GET)
 	public List<BlogList> blogLists() {
-		// 作了调整，未完成
 		return normalService.readBlog();
+	}
+	
+	// 查看博客列表
+	@ResponseBody
+	@RequestMapping(value = "/showBlog/{page}", method = RequestMethod.GET)
+	public List<BlogList> blogListByPage(@PathVariable("page") String page) {
+		return normalService.readBlogByPage(Integer.parseInt(page));
 	}
 	
 	// 查看某一条博客的具体信息
 	@ResponseBody
 	@RequestMapping("/blogDetail/{blogId}")
-	public Blog blogDetail(@PathVariable("blogId") String blogId) {
+	public BlogData blogDetail(@PathVariable("blogId") String blogId) {
 		// could not write json  com.blog.domain.Blog["tags"]
 		return normalService.findBlogById(Integer.parseInt(blogId));
 	}
