@@ -5,7 +5,7 @@ import java.util.Set;
 public class Tag {
 
 	private Integer tagId;
-	private String userId;
+	private Integer userId;
 	private String tagContent;
 	private Set<Blog> blogs;
 	public Integer getTagId() {
@@ -14,10 +14,10 @@ public class Tag {
 	public void setTagId(Integer tagId) {
 		this.tagId = tagId;
 	}
-	public String getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
-	public void setUserId(String userId) {
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
 	public String getTagContent() {
@@ -77,7 +77,7 @@ public class Tag {
 	public String toString() {
 		return "Tag [tagId=" + tagId + ", userId=" + userId + ", tagContent=" + tagContent + ", blogs=" + blogs + "]";
 	}
-	public Tag(Integer tagId, String userId, String tagContent, Set<Blog> blogs) {
+	public Tag(Integer tagId, Integer userId, String tagContent, Set<Blog> blogs) {
 		super();
 		this.tagId = tagId;
 		this.userId = userId;

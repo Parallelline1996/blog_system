@@ -124,7 +124,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean createTag(Tag tag) {
+	public boolean createTag(Tag tag, Integer userId) {
+		tag.setUserId(userId);
 		return tagDao.createTag(tag);
 	}
 

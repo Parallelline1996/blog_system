@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -88,24 +89,24 @@ public class UserController {
 		Integer ownId = (Integer)session.getAttribute("userId");
 		return userService.numberOfFans(ownId);
 	}
-	/*
-	// 创建标签
+	
+	// 创建标签，只需要上传标签的内容即可
 	@ResponseBody
-	@RequestMapping("/createTag")
-	public int createTag(@RequestBody Tag tag) {//不通过
-		if( userService.createTag(tag)){
+	@RequestMapping(value = "/createTag", method = RequestMethod.POST)
+	public int createTag(@RequestBody Tag tag, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		Integer userId = (Integer)session.getAttribute("userId");
+		if (userService.createTag(tag, userId)) {
 			return 200;
-		}
-		else{
+		} else {
 			return -1;
 		}
-		//return 0;
 	}
-	
+	/*
 	// 删除标签
 	@ResponseBody
-	@RequestMapping("/deleteTag")
-	public int deleteTag(@RequestBody Tag tag) {//不通过
+	@RequestMapping(value = "/deleteTag")
+	public int deleteTag(@RequestBody Tag tag) {
 		if(userService.deleteTag(tag)) {
 			return 200;
 		}
@@ -124,15 +125,18 @@ public class UserController {
 		else {
 			return -1;
 		}
+		return 0;
 	}
 	
 	// 筛选标签
 	@ResponseBody
 	@RequestMapping("/selectTag/{tagId}")//不通过
 	public List<BlogList> selectTag(@PathVariable("tagId") String tagId) {
-		return userService.selectTag(tagId);
+		//return userService.selectTag(tagId);
+		return null;
 	}
 	
+	/*
 	// 点赞
 	@ResponseBody
 	@RequestMapping("/agree")//不通过,逻辑理不清
