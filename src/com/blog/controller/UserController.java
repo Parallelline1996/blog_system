@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.blog.dao.UserDao;
 import com.blog.domain.Blog;
 import com.blog.domain.Comment;
 import com.blog.domain.Tag;
@@ -135,32 +136,35 @@ public class UserController {
 		//return userService.selectTag(tagId);
 		return null;
 	}
+	*/
 	
-	/*
 	// 点赞
 	@ResponseBody
-	@RequestMapping("/agree")//不通过,逻辑理不清
-	public int agree(@RequestBody String userId, String blogId) {
-		if( userService.agree(userId, blogId)){
+	@RequestMapping(value = "/agree/{blogId}", method = RequestMethod.GET)
+	public int agree(@PathVariable("blogId") Integer blogId, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		Integer userId = (Integer)session.getAttribute("userId");
+		if (userService.agree(userId, blogId)) {
 			return 200;
-		}
-		else {
+		} else {
 			return -1;
 		}
+
 	}
 	
 	// 点踩
 	@ResponseBody
-	@RequestMapping("/disagree")//不通过,逻辑理不清
-	public int disagree(@RequestBody String userId, String blogId) {
-		if( userService.disagree(userId, blogId)){
+	@RequestMapping(value = "/disagree/{blogId}", method = RequestMethod.GET)
+	public int disagree(@PathVariable("blogId") Integer blogId, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		Integer userId = (Integer)session.getAttribute("userId");
+		if (userService.disagree(userId, blogId)) {
 			return 200;
-		}
-		else {
+		} else {
 			return -1;
 		}
 	}
-	
+	/*
 	// 更新用户信息
 	@ResponseBody
 	@RequestMapping("/updateUserData")

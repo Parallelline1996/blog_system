@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 import com.blog.dao.UpDownDao;
 import com.blog.dao.UserDao;
 import com.blog.dao.BlogDao;
-import com.blog.domain.User;
 import com.blog.domain.Blog;
 import com.blog.util.HibernateUtil;
 import com.blog.domain.UpOrDownId;
@@ -31,16 +30,15 @@ public class UpDownDaoImpl extends HibernateUtil implements UpDownDao{
 	@Qualifier("blogDaoImpl")
 	private BlogDao blogDao;
 	
-	//这三个函数搞不懂是怎么回事
+	// 判断是否在UpORDown表中插入了对应的 userId -> blogId
 	@Override
 	public int upOrDown(Integer userId, Integer blogId) {
-		// TODO Auto-generated method stub
 		Session session = sessionFactory.openSession();
-		String hql = "from UpOrDownId where userId = ? and blogId = ? ";
-		User user = null;
+		String hql = "from UpOrDown where UpOrDownId.userId = ? and UpOrDownId.blogId = ? ";
+		UpOrDown upOrDown = null;
 		try {
 			// 当确定返回值为1个或null时，使用uniqueResult
-			user = (User)session.createQuery(hql)
+			upOrDown = (UpOrDown)session.createQuery(hql)
 					.setParameter(0, userId).setParameter(1, blogId)
 					.uniqueResult();
 		} catch (Exception e) {
@@ -49,32 +47,61 @@ public class UpDownDaoImpl extends HibernateUtil implements UpDownDao{
 			session.close();
 		}
 		// 是否存在，存在的话返回的是true
-		if (user != null)
-			return 1;
-		return 0;
+		if (upOrDown == null) {
+			// 表示用户没有进行点赞或点踩
+			return 0;
+		} else {
+			// 返回 upOrDown 对应的 state，如果为1表示赞，-1表示踩
+			return upOrDown.getState();
+		}
 	}
 
 	@Override
 	public boolean agree(Integer userId, Integer blogId) {
-		UpOrDownId upOrDownId = new UpOrDownId(userId, blogId);
-		UpOrDown upOrDown = new UpOrDown(upOrDownId,0);
-		Blog blogger = blogDao.findBlogById(blogId);
-		if(blogger!=null) {
-			blogger.setNumberOfAgree(blogger.getNumberOfAgree() + 1);
+		if (upOrDown(userId, blogId) == 1) {
+			return true;
+		} else if (upOrDown(userId, blogId) == -1) {
+			// 回头看看这里用不用用transaction写
+			UpOrDownId upOrDownId = new UpOrDownId(userId, blogId);
+			UpOrDown upOrDown = new UpOrDown(upOrDownId, 1);
+			Blog blog = blogDao.findBlogById(blogId);
+			blog.setNumberOfAgree(blog.getNumberOfAgree() + 1);
+			blog.setNumberOfDisagree(blog.getNumberOfDisagree() - 1);
+			return update(upOrDown) && update(blog);
+		} else {
+			UpOrDownId upOrDownId = new UpOrDownId(userId, blogId);
+			UpOrDown upOrDown = new UpOrDown(upOrDownId,1);
+			Blog blog = blogDao.findBlogById(blogId);
+			if(blog != null) {
+				blog.setNumberOfAgree(blog.getNumberOfAgree() + 1);
+				update(blog);
+			}
+			return save(upOrDown);
 		}
-		return save(upOrDown);
 	}
 
 	@Override
 	public boolean disagree(Integer userId, Integer blogId) {
-		// TODO Auto-generated method stub
-		UpOrDownId upOrDownId = new UpOrDownId(userId, blogId);
-		UpOrDown upOrDown = new UpOrDown(upOrDownId,1);
-		Blog blogger = blogDao.findBlogById(blogId);
-		if(blogger!=null) {
-			blogger.setNumberOfAgree(blogger.getNumberOfDisagree() + 1);
+		if (upOrDown(userId, blogId) == -1) {
+			return true;
+		} else if (upOrDown(userId, blogId) == 1) {
+			// 回头看看这里用不用用transaction写
+			UpOrDownId upOrDownId = new UpOrDownId(userId, blogId);
+			UpOrDown upOrDown = new UpOrDown(upOrDownId, -1);
+			Blog blog = blogDao.findBlogById(blogId);
+			blog.setNumberOfAgree(blog.getNumberOfAgree() - 1);
+			blog.setNumberOfDisagree(blog.getNumberOfDisagree() + 1);
+			return update(upOrDown) && update(blog);
+		} else {
+			UpOrDownId upOrDownId = new UpOrDownId(userId, blogId);
+			UpOrDown upOrDown = new UpOrDown(upOrDownId, -1);
+			Blog blog = blogDao.findBlogById(blogId);
+			if(blog != null) {
+				blog.setNumberOfAgree(blog.getNumberOfDisagree() + 1);
+				update(blog);
+			}
+			return save(upOrDown);
 		}
-		return save(upOrDown);
 
 	}
 
