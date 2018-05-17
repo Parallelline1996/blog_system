@@ -37,61 +37,25 @@ public class CommentDaoImpl extends HibernateUtil implements CommentDao {
 	}
 
 	@Override
-	public List<Comment> allCommentYouMade(Integer userId) {
-		// TODO Auto-generated method stub
-		String hql = "from Comment where userId = ? and status = 0";
-		
-		Session session = getSessionFactory().openSession();
-		Transaction tx = session.beginTransaction();
-		List<Comment> res = null;
-		Query query = null;
-		try {
-			query = session.createQuery(hql).setParameter(0, userId);
-			res = query.list();
-		} catch (Exception e) {
-            e.printStackTrace();
-		}finally{
-			session.close();
+	public List<Comment> allCommentYouMade(Integer userId, Integer page) {
+		String hql = "from Comment where userId = " + userId +" and status = 0";
+		List<Object> temp = listpage(hql, page, 5);
+		List<Comment> comments = new ArrayList<>();
+		for (Object o : temp) {
+			comments.add((Comment)o);
 		}
-		return res;
+		return comments;
 	}
 
 	@Override
-	public List<Comment> allCommentYouGet(Integer userId) {
-		// TODO Auto-generated method stub
-		String hql2 = "from Blog where userId = ?";
-		Session session2 = getSessionFactory().openSession();
-		List<Blog> b = new ArrayList<>();
-		List<Comment> res = null;
-		Query q = null;
-		try {
-			q = session2.createQuery(hql2).setParameter(0, userId);
-			b = q.list();
-		} catch (Exception e) {
-            e.printStackTrace();
-		}finally{
-			session2.close();
+	public List<Comment> allCommentYouGet(Integer userId, Integer page) {
+		String hql = "from Comment where ";
+		List<Object> temp = listpage(hql, page, 5);
+		List<Comment> comments = new ArrayList<>();
+		for (Object o : temp) {
+			comments.add((Comment)o);
 		}
-		if(b!=null)
-		{
-			for(Blog Blog:b) {
-				String hql = "from Comment where commentObjectId = ? and status = 0";
-				
-				Session session = getSessionFactory().openSession();
-				Transaction tx = session.beginTransaction();
-
-				Query query = null;
-				try {
-					query = session.createQuery(hql).setParameter(0, Blog);
-					res = query.list();
-				} catch (Exception e) {
-		            e.printStackTrace();
-				}finally{
-					session.close();
-				}
-			}
-		}
-		return res;
+		return comments;
 	}
 
 	@Override

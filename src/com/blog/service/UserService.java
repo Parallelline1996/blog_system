@@ -6,6 +6,7 @@ import com.blog.domain.Blog;
 import com.blog.domain.Comment;
 import com.blog.domain.Tag;
 import com.blog.domain.User;
+import com.blog.util.request.BlogWithTag;
 import com.blog.util.response.BlogList;
 import com.blog.util.response.UserSimpleData;
 
@@ -25,9 +26,9 @@ public interface UserService {
 	
 	boolean createTag(Tag tag, Integer userId);
 	
-	boolean deleteTag(Tag tag);
+	boolean deleteTag(Integer tagId);
 	
-	boolean setTag(Integer tagId, Integer blogId);
+	boolean setTag(BlogWithTag data);
 	
 	List<BlogList> selectTag(Integer tagId);
 	
@@ -35,24 +36,26 @@ public interface UserService {
 	
 	boolean disagree(Integer userId, Integer blogId);
 	
-	boolean updateUserData(User user);
+	int updateUserData(User user, Integer userId);
 	
 	// 在这里对数据进行转换
 	boolean createBlog(Blog blog);
 	
-	boolean deleteBlog(Integer blogId);
+	int deleteBlog(Integer blogId, Integer userId);
+	
+	int deleteBlogToTrashBin(Integer blogId, Integer userId);
 	
 	boolean updateBlog(Blog blog);
 	
-	boolean undoDeleteBlog(Integer blogId);
+	int undoDeleteBlog(Integer blogId, Integer userId);
 	
 	boolean cachBlog(Blog blog);
 	
-	boolean createComment(Comment comment);
+	int createComment(Comment comment, Integer userId);
 	
-	boolean deleteComment(Integer commentId);
+	int deleteComment(Integer commentId, Integer userId);
 	
-	List<Comment> allCommentYouMade(Integer userId);
+	List<Comment> allCommentYouMade(Integer userId, Integer page);
 	
-	List<Comment> allCommentYouGet(Integer userId);
+	List<Comment> allCommentYouGet(Integer userId, Integer page);
 }

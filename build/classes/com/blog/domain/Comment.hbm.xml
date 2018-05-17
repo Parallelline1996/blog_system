@@ -13,7 +13,7 @@
             <generator class="identity"/>
         </id>
    
-        <property name="commentObjectId" type="java.lang.String">
+        <property name="commentObjectId" type="java.lang.Integer">
             <column name="comment_object_ID" />
         </property>
         
@@ -33,7 +33,7 @@
             <column name="object_option" />
         </property>
         
-        <property name="userId" type="java.lang.String">
+        <property name="userId" type="java.lang.Integer">
             <column name="user_ID" />
         </property>
         

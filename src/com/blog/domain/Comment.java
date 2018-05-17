@@ -5,16 +5,16 @@ import java.util.Date;
 public class Comment {
 
 	private Integer commentId;
-	private String commentObjectId;
+	private Integer commentObjectId;
 	private String content;
 	private Integer status;
 	private Date sendTime;
 	private Integer objectOption;
-	private String userId;
+	private Integer userId;
 	public Comment() {
 	}
-	public Comment(Integer commentId, String commentObjectId, String content, Integer status, Date sendTime,
-			Integer objectOption, String userId) {
+	public Comment(Integer commentId, Integer commentObjectId, String content, Integer status, Date sendTime,
+			Integer objectOption, Integer userId) {
 		super();
 		this.commentId = commentId;
 		this.commentObjectId = commentObjectId;
@@ -95,10 +95,10 @@ public class Comment {
 	public void setCommentId(Integer commentId) {
 		this.commentId = commentId;
 	}
-	public String getCommentObjectId() {
+	public Integer getCommentObjectId() {
 		return commentObjectId;
 	}
-	public void setCommentObjectId(String commentObjectId) {
+	public void setCommentObjectId(Integer commentObjectId) {
 		this.commentObjectId = commentObjectId;
 	}
 	public String getContent() {
@@ -125,10 +125,10 @@ public class Comment {
 	public void setObjectOption(Integer objectOption) {
 		this.objectOption = objectOption;
 	}
-	public String getUserId() {
+	public Integer getUserId() {
 		return userId;
 	}
-	public void setUserId(String userId) {
+	public void setUserId(Integer userId) {
 		this.userId = userId;
 	}
 	

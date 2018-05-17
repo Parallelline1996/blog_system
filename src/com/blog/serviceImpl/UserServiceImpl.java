@@ -1,6 +1,9 @@
 package com.blog.serviceImpl;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +21,7 @@ import com.blog.domain.Comment;
 import com.blog.domain.Tag;
 import com.blog.domain.User;
 import com.blog.service.UserService;
+import com.blog.util.request.BlogWithTag;
 import com.blog.util.response.BlogList;
 import com.blog.util.response.UserSimpleData;
 import java.util.Set;
@@ -130,20 +134,32 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean deleteTag(Tag tag) {
-		return tagDao.deleteTag(tag);
+	public boolean deleteTag(Integer tagId) {
+		Tag tag = tagDao.findTagById(tagId);
+		if (tag == null) {
+			return false;
+		} else {
+			return tagDao.deleteTag(tag);
+		}
 	}
 
 	@Override
-	public boolean setTag(Integer tagId, Integer blogId) {
-		return tagDao.setTag(tagId, blogId);
+	public boolean setTag(BlogWithTag data) {
+		Integer blogId = data.getBlogId();
+		List<Integer> tagIds = data.getTagId();
+		for (Integer tagId : tagIds) {
+			if (!tagDao.setTag(tagId, blogId)) {
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	@Override
 	public List<BlogList> selectTag(Integer tagId) {
-		List<BlogList> blogLists=new ArrayList<>();
+		List<BlogList> blogLists = new ArrayList<>();
 		Set<Blog> blog = tagDao.findTagById(tagId).getBlogs();
-		if(blog!=null) {
+		if (blog != null) {
 			for(Blog Blog:blog) {/*
 				blogLists.add(new BlogList(Blog.getBlogId(),Blog.getBlogTitle(),Blog.getNumberOfAgree(),
 						Blog.getBlogState(),Blog.getPostTime(),Blog.getUserId()));*/
@@ -158,8 +174,31 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean deleteBlog(Integer blogId) {
-		return blogDao.deleteBlog(blogId);
+	public int deleteBlog(Integer blogId, Integer userId) {
+		Blog blog = blogDao.findBlogById(blogId);
+		if (blog.getBlogState() == 2 || blog.getUserId() != userId) {
+			return -1;
+		} else {
+			if (blogDao.deleteBlog(blogId)) {
+				return 200;
+			} else {
+				return -2;
+			}
+		}
+	}
+	
+	@Override
+	public int deleteBlogToTrashBin(Integer blogId, Integer userId) {
+		Blog blog = blogDao.findBlogById(blogId);
+		if (blog.getBlogState() != 0 || blog.getUserId() != userId) {
+			return -1;
+		} else {
+			if (blogDao.deleteBlogToTrashBin(blogId)) {
+				return 200;
+			} else {
+				return -2;
+			}
+		}
 	}
 
 	@Override
@@ -168,8 +207,17 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean undoDeleteBlog(Integer blogId) {
-		return blogDao.undoDeleteBlog(blogId);
+	public int undoDeleteBlog(Integer blogId, Integer userId) {
+		Blog blog = blogDao.findBlogById(blogId);
+		if (blog.getBlogState() != 1 || blog.getUserId() != userId) {
+			return -1;
+		} else {
+			if (blogDao.undoDeleteBlog(blogId)) {
+				return 200;
+			} else {
+				return -2;
+			}
+		}
 	}
 
 	@Override
@@ -178,27 +226,70 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean updateUserData(User user) {
-		return userDao.updateUserData(user);
+	public int updateUserData(User user, Integer userId) {
+		if (user.getUserId() != userId) {
+			// -1 代表修改了非本人的信息
+			return -1;
+		} else {
+			User newUser = userDao.findUserById(userId);
+			newUser.setNickName(user.getNickName());
+			newUser.setPhoneNumber(user.getPhoneNumber());
+			newUser.seteMail(user.geteMail());
+			newUser.setProfile(user.getProfile());
+			if (userDao.updateUserData(newUser)) {
+				return 200;
+			} else {
+				// 表示更新错误
+				return -2;
+			}
+		}
 	}
 
 	@Override
-	public boolean createComment(Comment comment) {
-		return commentDao.createComment(comment);
+	public int createComment(Comment comment, Integer userId) {
+		if (userId != comment.getUserId()) {
+			// 代表非本人评论
+			return -1;
+		} else {
+			comment.setStatus(0);
+			Timestamp timestamp = new Timestamp(new Date().getTime());
+			comment.setSendTime(timestamp);
+			if (commentDao.createComment(comment)) {
+				return 200;
+			} else {
+				// 表示创建评论失败
+				return -2;
+			}
+		}
 	}
 
 	@Override
-	public boolean deleteComment(Integer commentId) {
-		return commentDao.deleteComment(commentId);
+	public int deleteComment(Integer commentId, Integer userId) {
+		Comment comment = commentDao.findCommentById(commentId);
+		if (comment == null) {
+			// 删除失败
+			return -2;
+		}
+		if (userId != comment.getUserId() || comment.getStatus() != 0) {
+			// 并非对本人评论进行操作
+			return -1;
+		} else {
+			if (commentDao.deleteComment(commentId)) {
+				return 200;
+			} else {
+				// 删除失败
+				return -2;
+			}
+		}
 	}
 
 	@Override
-	public List<Comment> allCommentYouMade(Integer userId) {
-		return commentDao.allCommentYouMade(userId);
+	public List<Comment> allCommentYouMade(Integer userId, Integer page) {
+		return commentDao.allCommentYouMade(userId, page);
 	}
 
 	@Override
-	public List<Comment> allCommentYouGet(Integer userId) {
-		return commentDao.allCommentYouGet(userId);
+	public List<Comment> allCommentYouGet(Integer userId, Integer page) {
+		return commentDao.allCommentYouGet(userId, page);
 	}
 }

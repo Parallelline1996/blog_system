@@ -45,7 +45,7 @@ public class TagDaoImpl extends HibernateUtil implements TagDao {
 			if(tag!=null) {
 				temp.add(tag);
 				blog.setTags(temp);
-				return true;
+				return update(blog);
 			}
 		}
 		return false;

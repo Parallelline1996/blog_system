@@ -1,5 +1,6 @@
 package com.blog.controller;
 
+import java.sql.Blob;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -103,12 +104,12 @@ public class UserController {
 			return -1;
 		}
 	}
-	/*
+	
 	// 删除标签
 	@ResponseBody
-	@RequestMapping(value = "/deleteTag")
-	public int deleteTag(@RequestBody Tag tag) {
-		if(userService.deleteTag(tag)) {
+	@RequestMapping(value = "/deleteTag/{tagId}")
+	public int deleteTag(@PathVariable("tagId") Integer tagId) {
+		if (userService.deleteTag(tagId)) {
 			return 200;
 		}
 		else {
@@ -116,27 +117,32 @@ public class UserController {
 		}
 	}
 	
+	// 测试未通过，涉及联级删除、增加的问题。待查
 	// 设置标签
 	@ResponseBody
 	@RequestMapping("/setTag")
-	public int setTag(@RequestBody String tagId, String blogId) {//不通过
-		if(userService.setTag(tagId, blogId)) {
+	public int setTag(@RequestBody BlogWithTag data) {
+		
+		System.out.println(data.toString());
+		
+		
+		if(userService.setTag(data)) {
 			return 200;
 		}
 		else {
 			return -1;
 		}
-		return 0;
+		
 	}
 	
+	// 未测试，类似于上面的函数
 	// 筛选标签
 	@ResponseBody
-	@RequestMapping("/selectTag/{tagId}")//不通过
+	@RequestMapping("/selectTag/{tagId}")
 	public List<BlogList> selectTag(@PathVariable("tagId") String tagId) {
-		//return userService.selectTag(tagId);
 		return null;
 	}
-	*/
+	
 	
 	// 点赞
 	@ResponseBody
@@ -164,20 +170,21 @@ public class UserController {
 			return -1;
 		}
 	}
+	
 	/*
+	 * 需传入: userId, nickName, eMail, phoneNumber, profile;
+	*/
 	// 更新用户信息
 	@ResponseBody
 	@RequestMapping("/updateUserData")
-	public int updateUserData(@RequestBody User user) {//通过
-	
-		if( userService.updateUserData(user)){
-			return 200;
-		}
-		else {
-			return -1;
-		}
+	public int updateUserData(@RequestBody User user, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		Integer userId = (Integer)session.getAttribute("userId");
+		return userService.updateUserData(user, userId);
 	}
 	
+	
+	/*
 	// 新增博客
 	@ResponseBody
 	@RequestMapping("/createBlog")
@@ -188,20 +195,26 @@ public class UserController {
 		else {
 			return -1;
 		}
-	}
+	}*/
 	
-	// 删除博客
+	// 直接删除博客(可以在垃圾回收站处删除，也可以直接在文章里删除)
 	@ResponseBody
-	@RequestMapping("/deleteBlog/{blogId}")
-	public int deleteBlog(@PathVariable("blogId") String blogId) {//通过
-		if(userService.deleteBlog(blogId)) {
-			return 200;
-		}
-		else {
-			return -1;
-		}
+	@RequestMapping(value = "/deleteBlog/{blogId}", method = RequestMethod.GET)
+	public int deleteBlog(@PathVariable("blogId") Integer blogId, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		Integer userId = (Integer)session.getAttribute("userId");
+		return userService.deleteBlog(blogId, userId);
 	}
 	
+	// 将博客放入垃圾回收站
+	@ResponseBody
+	@RequestMapping(value = "/deleteBlogToTrashBin/{blogId}", method = RequestMethod.GET)
+	public int deleteBlogToTrashBin(@PathVariable("blogId") Integer blogId, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		Integer userId = (Integer)session.getAttribute("userId");
+		return userService.deleteBlogToTrashBin(blogId, userId);
+	}
+	/*
 	// 更新博客
 	@ResponseBody
 	@RequestMapping("/updateBlog")//不通过
@@ -213,19 +226,19 @@ public class UserController {
 			return -1;
 		}
 	}
+	*/
 	
 	// 撤销删除博客
 	@ResponseBody
-	@RequestMapping("/undoDeleteBlog/{blogId}")//通过
-	public int undoDeleteBlog(@PathVariable("blogId") String blogId) {
-		if(userService.undoDeleteBlog(blogId)) {
-			return 200;
-		}
-		else {
-			return -1;
-		}
+	@RequestMapping(value = "/undoDeleteBlog/{blogId}", method = RequestMethod.GET)
+	public int undoDeleteBlog(@PathVariable("blogId") Integer blogId, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		Integer userId = (Integer)session.getAttribute("userId");
+		return userService.undoDeleteBlog(blogId, userId);
 	}
 	
+	
+	/*
 	// 缓存博客
 	@ResponseBody
 	@RequestMapping("/cachBlog")//不通过
@@ -237,42 +250,54 @@ public class UserController {
 			return -1;
 		}
 	}
+	*/
 	
+	/*
+	 * {传入的信息：
+	"commentObjectId":1,
+	"content":"good",
+	"objectOption":1,
+	"userId":1
+	 * */
 	// 评论
 	@ResponseBody
-	@RequestMapping("/createComment")//不通过
-	public int createComment(@RequestBody Comment comment) {
-		if( userService.createComment(comment)){
-			return 200;
-		}
-		else {
-			return -1;
-		}
+	@RequestMapping(value = "/createComment", method = RequestMethod.POST)
+	public int createComment(@RequestBody Comment comment, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		Integer userId = (Integer)session.getAttribute("userId");
+		return userService.createComment(comment, userId);
 	}
 	
+	
+	// 目前只支持删除自己写的评论的操作
 	// 删除评论
 	@ResponseBody
-	@RequestMapping("/deleteComment/{commentId}")//通过
-	public int deleteComment(@PathVariable("commentId") String commentId) {
-		if( userService.deleteComment(commentId)){
-			return 200;
-		}
-		else {
-			return -1;
-		}
+	@RequestMapping(value = "/deleteComment/{commentId}", method = RequestMethod.GET)
+	public int deleteComment(@PathVariable("commentId") Integer commentId, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		Integer userId = (Integer)session.getAttribute("userId");
+		return userService.deleteComment(commentId, userId);
 	}
+	
 	
 	// 你所评论过的所有评论
 	@ResponseBody
-	@RequestMapping("/allCommentYouMade/{userId}")//不通过
-	public List<Comment> allCommentYouMade(@PathVariable("userId") String userId) {
-		return userService.allCommentYouMade(userId);
+	@RequestMapping("/allCommentYouMade/{page}")
+	public List<Comment> allCommentYouMade(@PathVariable("page") Integer page, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		Integer userId = (Integer)session.getAttribute("userId");
+		return userService.allCommentYouMade(userId, page);
 	}
 	
+	/*
+	 * 疑问：要怎么传
+	 * */
 	// 你所获得的所有评论
 	@ResponseBody
-	@RequestMapping("/allCommentYouGet/{userId}")//不通过
-	public List<Comment> allCommentYouGet(@PathVariable("userId")  String userId) {
-		return userService.allCommentYouGet(userId);
-	}*/
+	@RequestMapping("/allCommentYouGet/{page}")
+	public List<Comment> allCommentYouGet(@PathVariable("page") Integer page, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		Integer userId = (Integer)session.getAttribute("userId");
+		return userService.allCommentYouGet(userId, page);
+	}
 }

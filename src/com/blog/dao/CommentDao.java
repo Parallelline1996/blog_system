@@ -10,9 +10,9 @@ public interface CommentDao {
 	
 	boolean deleteComment(Integer commentId);
 	
-	List<Comment> allCommentYouMade(Integer userId);
+	List<Comment> allCommentYouMade(Integer userId, Integer page);
 	
-	List<Comment> allCommentYouGet(Integer userId);
+	List<Comment> allCommentYouGet(Integer userId, Integer page);
 	
 	Comment findCommentById(Integer commentId);
 }
