@@ -23,7 +23,6 @@ public class AccountServiceImpl implements AccountService {
 	@Qualifier("adminDaoImpl")
 	private AdminDao adminDao;
 	
-	// 测试用，未完成
 	@Override
 	public int createUser(User user) {
 		if (userDao.accountExist(user.geteMail())) {
@@ -48,7 +47,7 @@ public class AccountServiceImpl implements AccountService {
 	public int login(@RequestBody LoginData data) {
 		int code = data.getCode();
 		// 代表是普通用户
-		if (code == 1) {
+		if (code != 1) {
 			if(userDao.accountExist(data.getEmail())) {
 				int temp = userDao.checkPassword(data.getEmail(), data.getPassword());
 				if (temp > 0) {

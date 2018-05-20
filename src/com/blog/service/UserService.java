@@ -2,11 +2,11 @@ package com.blog.service;
 
 import java.util.List;
 
-import com.blog.domain.Blog;
 import com.blog.domain.Comment;
 import com.blog.domain.Tag;
 import com.blog.domain.User;
 import com.blog.util.request.BlogWithTag;
+import com.blog.util.request.NewBlog;
 import com.blog.util.response.BlogList;
 import com.blog.util.response.UserSimpleData;
 
@@ -39,17 +39,17 @@ public interface UserService {
 	int updateUserData(User user, Integer userId);
 	
 	// 在这里对数据进行转换
-	boolean createBlog(Blog blog);
+	boolean createBlog(NewBlog blog, Integer userId);
 	
 	int deleteBlog(Integer blogId, Integer userId);
 	
 	int deleteBlogToTrashBin(Integer blogId, Integer userId);
 	
-	boolean updateBlog(Blog blog);
+	int updateBlog(NewBlog blog, Integer userId);
 	
 	int undoDeleteBlog(Integer blogId, Integer userId);
 	
-	boolean cachBlog(Blog blog);
+	int cachBlog(NewBlog blog, Integer userId);
 	
 	int createComment(Comment comment, Integer userId);
 	
@@ -58,4 +58,10 @@ public interface UserService {
 	List<Comment> allCommentYouMade(Integer userId, Integer page);
 	
 	List<Comment> allCommentYouGet(Integer userId, Integer page);
+	
+	List<BlogList> blog(Integer userId, int page);
+	
+	List<BlogList> cachBlog(Integer userId, int page);
+	
+	List<BlogList> trashBinBlog(Integer userId, int page);
 }

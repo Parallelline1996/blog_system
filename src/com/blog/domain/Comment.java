@@ -1,6 +1,6 @@
 package com.blog.domain;
 
-import java.util.Date;
+import java.sql.Timestamp;
 
 public class Comment {
 
@@ -8,12 +8,12 @@ public class Comment {
 	private Integer commentObjectId;
 	private String content;
 	private Integer status;
-	private Date sendTime;
+	private Timestamp sendTime;
 	private Integer objectOption;
 	private Integer userId;
 	public Comment() {
 	}
-	public Comment(Integer commentId, Integer commentObjectId, String content, Integer status, Date sendTime,
+	public Comment(Integer commentId, Integer commentObjectId, String content, Integer status, Timestamp sendTime,
 			Integer objectOption, Integer userId) {
 		super();
 		this.commentId = commentId;
@@ -113,10 +113,10 @@ public class Comment {
 	public void setStatus(Integer status) {
 		this.status = status;
 	}
-	public Date getSendTime() {
+	public Timestamp getSendTime() {
 		return sendTime;
 	}
-	public void setSendTime(Date sendTime) {
+	public void setSendTime(Timestamp sendTime) {
 		this.sendTime = sendTime;
 	}
 	public Integer getObjectOption() {

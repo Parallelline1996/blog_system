@@ -3,16 +3,13 @@ package com.blog.daoImpl;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
 
 import com.blog.dao.CommentDao;
-import com.blog.domain.Blog;
 import com.blog.domain.Comment;
 import com.blog.util.HibernateUtil;
 

@@ -1,9 +1,7 @@
 package com.blog.daoImpl;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -135,8 +133,7 @@ public class BlogDaoImpl extends HibernateUtil implements BlogDao {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<Blog> allBlogById(Integer userId) {
-		// 未被检验
-		String hql = "from Blog as b where b.id  = 'userId'";
+		String hql = "from Blog where blogId  = " + userId + " and blogState = 0";
 		return (List<Blog>) findByHql(hql, null);
 	}
 
@@ -163,6 +160,42 @@ public class BlogDaoImpl extends HibernateUtil implements BlogDao {
 	public List<BlogList> selectTag(Blog blog, Integer tagId) {
 		// 暂时跳过
 		return null;
+	}
+
+	@Override
+	public List<Blog> listPageBlog(int userId, int pageNo) {
+		// 0 代表正常状态
+		String hql = "from Blog where blogState = 0 and userId  = " + userId;
+		List<Object> objects = listpage(hql, pageNo, 5);
+		List<Blog> blogs = new ArrayList<>();
+		for (Object o : objects) {
+			blogs.add((Blog)o);
+		}
+		return blogs;
+	}
+
+	@Override
+	public List<Blog> listPageCachBlog(int userId, int pageNo) {
+		// -1 代表缓存态
+		String hql = "from Blog where blogState = -1 and userId  = " + userId;
+		List<Object> objects = listpage(hql, pageNo, 5);
+		List<Blog> blogs = new ArrayList<>();
+		for (Object o : objects) {
+			blogs.add((Blog)o);
+		}
+		return blogs;
+	}
+
+	@Override
+	public List<Blog> listPageTrashBinBlog(int userId, int pageNo) {
+		// 1 代表进入垃圾箱
+		String hql = "from Blog where blogState = 1 and userId  = " + userId;
+		List<Object> objects = listpage(hql, pageNo, 5);
+		List<Blog> blogs = new ArrayList<>();
+		for (Object o : objects) {
+			blogs.add((Blog)o);
+		}
+		return blogs;
 	}
 
 }

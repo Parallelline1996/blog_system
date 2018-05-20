@@ -1,9 +1,9 @@
 package com.blog.serviceImpl;
 
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +22,10 @@ import com.blog.domain.Tag;
 import com.blog.domain.User;
 import com.blog.service.UserService;
 import com.blog.util.request.BlogWithTag;
+import com.blog.util.request.NewBlog;
 import com.blog.util.response.BlogList;
 import com.blog.util.response.UserSimpleData;
+
 import java.util.Set;
 @Service
 @Qualifier("userServiceImpl")
@@ -159,17 +161,27 @@ public class UserServiceImpl implements UserService {
 	public List<BlogList> selectTag(Integer tagId) {
 		List<BlogList> blogLists = new ArrayList<>();
 		Set<Blog> blog = tagDao.findTagById(tagId).getBlogs();
-		if (blog != null) {
-			for(Blog Blog:blog) {/*
+		if (blog != null) {/*
+			for(Blog Blog:blog) {
 				blogLists.add(new BlogList(Blog.getBlogId(),Blog.getBlogTitle(),Blog.getNumberOfAgree(),
-						Blog.getBlogState(),Blog.getPostTime(),Blog.getUserId()));*/
-			}
+						Blog.getBlogState(),Blog.getPostTime(),Blog.getUserId()));
+			}*/
 		}
 		return blogLists;
 	}
 
 	@Override
-	public boolean createBlog(Blog blog) {
+	public boolean createBlog(NewBlog newBlog, Integer userId) {
+		Timestamp tx = new Timestamp(new Date().getTime());
+		List<Integer> temp = newBlog.getTags();
+		Set<Tag> tags = new HashSet<>();
+		if (temp != null) {
+			for (Integer integer : temp) {
+				tags.add(tagDao.findTagById(integer));
+			}
+		}
+		Blog blog = new Blog(null, newBlog.getBlogTitle(), newBlog.getBlogContent(), 
+				0, 0, 0, tx, tx, userId, tags);
 		return blogDao.createBlog(blog);
 	}
 
@@ -202,8 +214,23 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean updateBlog(Blog blog) {
-		return blogDao.updateBlog(blog);
+	public int updateBlog(NewBlog blog, Integer userId) {
+		Blog blog2 = blogDao.findBlogById(blog.getBlogId());
+		if (blog2.getUserId() != userId) {
+			// 非操作自己的博客
+			return -1;
+		} else {
+			blog2.setBlogTitle(blog.getBlogTitle());
+			Timestamp tx = new Timestamp(new Date().getTime());
+			blog2.setLastModifiedTime(tx);
+			blog2.setBlogContent(blog.getBlogContent());
+			if (blogDao.updateBlog(blog2)) {
+				return 200;
+			} else {
+				// 系统异常
+				return -2;
+			}
+		}
 	}
 
 	@Override
@@ -221,8 +248,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean cachBlog(Blog blog) {
-		return blogDao.cachBlog(blog);
+	public int cachBlog(NewBlog blog, Integer userId) {
+		return 200;
+		//return blogDao.cachBlog(blog);
 	}
 
 	@Override
@@ -291,5 +319,35 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public List<Comment> allCommentYouGet(Integer userId, Integer page) {
 		return commentDao.allCommentYouGet(userId, page);
+	}
+
+	@Override
+	public List<BlogList> blog(Integer userId, int page) {
+		List<Blog> blogs = blogDao.listPageBlog(userId, page);
+		List<BlogList> temp = new ArrayList<>();
+		for (Blog blog : blogs) {
+			temp.add(new BlogList(blog.getBlogId(), blog.getBlogTitle(), blog.getNumberOfAgree(), blog.getBlogState(), blog.getPostTime(), blog.getUserId()));
+		}
+		return temp;
+	}
+
+	@Override
+	public List<BlogList> cachBlog(Integer userId, int page) {
+		List<Blog> blogs = blogDao.listPageCachBlog(userId, page);
+		List<BlogList> temp = new ArrayList<>();
+		for (Blog blog : blogs) {
+			temp.add(new BlogList(blog.getBlogId(), blog.getBlogTitle(), blog.getNumberOfAgree(), blog.getBlogState(), blog.getPostTime(), blog.getUserId()));
+		}
+		return temp;
+	}
+
+	@Override
+	public List<BlogList> trashBinBlog(Integer userId, int page) {
+		List<Blog> blogs = blogDao.listPageTrashBinBlog(userId, page);
+		List<BlogList> temp = new ArrayList<>();
+		for (Blog blog : blogs) {
+			temp.add(new BlogList(blog.getBlogId(), blog.getBlogTitle(), blog.getNumberOfAgree(), blog.getBlogState(), blog.getPostTime(), blog.getUserId()));
+		}
+		return temp;
 	}
 }

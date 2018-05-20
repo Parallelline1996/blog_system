@@ -25,7 +25,7 @@
             <column name="c_status" />
         </property>
         
-        <property name="sendTime" type="java.util.Date">
+        <property name="sendTime" type="java.sql.Timestamp">
             <column name="send_time" />
         </property>
         

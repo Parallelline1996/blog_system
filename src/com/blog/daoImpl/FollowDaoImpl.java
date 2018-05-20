@@ -31,7 +31,7 @@ public class FollowDaoImpl extends HibernateUtil implements FollowDao{
 	private SessionFactory sessionFactory;
 	
 	@Override
-	public boolean createFollow(Integer ownId, Integer userId) {
+	public boolean createFollow(Integer userId, Integer ownId) {
 		// 粉丝在前，博主在后
 		FollowUpId followUpId = new FollowUpId(userId, ownId);
 		Follow follow = new Follow(followUpId);

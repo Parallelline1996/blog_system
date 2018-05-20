@@ -31,11 +31,11 @@
             <column name="b_status" />
         </property>
         
-        <property name="postTime" type="java.util.Date">
+        <property name="postTime" type="java.sql.Timestamp">
             <column name="post_time" />
         </property>
         
-        <property name="lastModifiedTime" type="java.util.Date">
+        <property name="lastModifiedTime" type="java.sql.Timestamp">
             <column name="last_modified_time" />
         </property>
         

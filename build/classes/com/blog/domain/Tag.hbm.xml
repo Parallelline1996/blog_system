@@ -19,7 +19,7 @@
             <column name="t_content" />
         </property>
    
-   		<set name="blogs" table="blog_tag" inverse="true">
+   		<set name="blogs" table="blog_tag" inverse="true" lazy="false">
    			<key column="tagId"/>
    			<many-to-many class="com.blog.domain.Blog" column="blogId"/>
    		</set>

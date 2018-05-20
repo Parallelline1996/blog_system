@@ -12,7 +12,7 @@
         </id>
    
         <property name="eMail" type="java.lang.String">
-            <column name="a_e-mail" />
+            <column name="a_e_mail" />
         </property>
         
         <property name="password" type="java.lang.String">

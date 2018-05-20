@@ -1,7 +1,7 @@
 package com.blog.domain;
 
 
-import java.util.Date;
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -12,14 +12,14 @@ public class Blog {
 	private Integer numberOfAgree;
 	private Integer numberOfDisagree;
 	private Integer blogState;
-	private Date postTime;
-	private Date lastModifiedTime;
+	private Timestamp postTime;
+	private Timestamp lastModifiedTime;
 	private Integer userId;
 	private Set<Tag> tags = new HashSet<>();
 	public Blog() {
 	}
 	public Blog(Integer blogId, String blogTitle, String blogContent, Integer numberOfAgree, Integer numberOfDisagree,
-			Integer blogState, Date postTime, Date lastModifiedTime, Integer userId, Set<Tag> tags) {
+			Integer blogState, Timestamp postTime, Timestamp lastModifiedTime, Integer userId, Set<Tag> tags) {
 		super();
 		this.blogId = blogId;
 		this.blogTitle = blogTitle;
@@ -106,16 +106,16 @@ public class Blog {
 	public void setBlogState(Integer blogState) {
 		this.blogState = blogState;
 	}
-	public Date getPostTime() {
+	public Timestamp getPostTime() {
 		return postTime;
 	}
-	public void setPostTime(Date postTime) {
+	public void setPostTime(Timestamp postTime) {
 		this.postTime = postTime;
 	}
-	public Date getLastModifiedTime() {
+	public Timestamp getLastModifiedTime() {
 		return lastModifiedTime;
 	}
-	public void setLastModifiedTime(Date lastModifiedTime) {
+	public void setLastModifiedTime(Timestamp lastModifiedTime) {
 		this.lastModifiedTime = lastModifiedTime;
 	}
 	public Integer getUserId() {

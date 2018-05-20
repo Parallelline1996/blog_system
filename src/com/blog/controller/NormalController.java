@@ -32,6 +32,9 @@ public class NormalController {
 	@Qualifier("normalServiceImpl")
 	private NormalService normalService;
 	
+	@Autowired
+	private HttpServletRequest request;
+
 	// 注册功能
 	@ResponseBody
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
@@ -42,11 +45,13 @@ public class NormalController {
 	// 登陆函数
 	@ResponseBody
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public int login(@RequestBody LoginData data, HttpServletRequest request) {
-		// 未完成，当登陆成功时，应记录登陆用户的类型 + 编号
+	public int login(@RequestBody LoginData data) {
 		HttpSession session = request.getSession();
 		session.setAttribute("userId", 1);
-		session.setAttribute("", "");
+		if (data.getCode() == 1) {
+			// 如果用户为管理员，做标记
+			session.setAttribute("isAdmin", 1);
+		}
 		return accountService.login(data);
 	}
 	

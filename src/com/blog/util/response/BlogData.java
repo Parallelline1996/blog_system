@@ -1,6 +1,7 @@
 package com.blog.util.response;
 
-import java.util.Date;
+import java.sql.Timestamp;
+
 import java.util.List;
 
 public class BlogData {
@@ -11,8 +12,8 @@ public class BlogData {
 	private Integer numberOfAgree;
 	private Integer numberOfDisagree;
 	private Integer blogState;
-	private Date postTime;
-	private Date lastModifiedTime;
+	private Timestamp postTime;
+	private Timestamp lastModifiedTime;
 	private Integer userId;
 	private List<String> tags;
 	@Override
@@ -93,7 +94,7 @@ public class BlogData {
 		return true;
 	}
 	public BlogData(Integer blogId, String blogTitle, String blogContent, Integer numberOfAgree,
-			Integer numberOfDisagree, Integer blogState, Date postTime, Date lastModifiedTime, Integer userId,
+			Integer numberOfDisagree, Integer blogState, Timestamp postTime, Timestamp lastModifiedTime, Integer userId,
 			List<String> tags) {
 		super();
 		this.blogId = blogId;
@@ -145,16 +146,16 @@ public class BlogData {
 	public void setBlogState(Integer blogState) {
 		this.blogState = blogState;
 	}
-	public Date getPostTime() {
+	public Timestamp getPostTime() {
 		return postTime;
 	}
-	public void setPostTime(Date postTime) {
+	public void setPostTime(Timestamp postTime) {
 		this.postTime = postTime;
 	}
-	public Date getLastModifiedTime() {
+	public Timestamp getLastModifiedTime() {
 		return lastModifiedTime;
 	}
-	public void setLastModifiedTime(Date lastModifiedTime) {
+	public void setLastModifiedTime(Timestamp lastModifiedTime) {
 		this.lastModifiedTime = lastModifiedTime;
 	}
 	public Integer getUserId() {

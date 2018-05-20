@@ -32,4 +32,10 @@ public interface BlogDao {
 	List<Blog> listPageAllBlogById(int pageNo, int pageNum);
 	
 	List<BlogList> selectTag(Blog blog, Integer tagId);
+	
+	List<Blog> listPageBlog(int userId, int pageNo);
+	
+	List<Blog> listPageCachBlog(int userId, int pageNo);
+	
+	List<Blog> listPageTrashBinBlog(int userId, int pageNo);
 }
