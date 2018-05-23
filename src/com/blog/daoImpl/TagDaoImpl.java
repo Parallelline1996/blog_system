@@ -1,7 +1,9 @@
 package com.blog.daoImpl;
 
+import java.util.List;
 import java.util.Set;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +65,27 @@ public class TagDaoImpl extends HibernateUtil implements TagDao {
 			session.close();
 		}
 		return tag;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Tag> findTagByUserId(Integer userId) {
+		String hql = "from Tag where userId = " + userId;
+		Session session = sessionFactory.openSession();
+		Query query = null;
+		List<Tag> tags = null;
+		try {
+			query = session.createQuery(hql);
+			tags = (List<Tag>)query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		for (Tag tag : tags) {
+			tag.setBlogs(null);
+		}
+		return tags;
 	}
 
 }

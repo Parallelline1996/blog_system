@@ -32,13 +32,16 @@ public interface UserService {
 	
 	List<BlogList> selectTag(Integer tagId);
 	
+	List<Tag> selectTagById(Integer userId);
+	
+	List<Tag> selectTagByBlog(Integer blogId);
+	
 	boolean agree(Integer userId, Integer blogId);
 	
 	boolean disagree(Integer userId, Integer blogId);
 	
 	int updateUserData(User user, Integer userId);
 	
-	// 在这里对数据进行转换
 	boolean createBlog(NewBlog blog, Integer userId);
 	
 	int deleteBlog(Integer blogId, Integer userId);
@@ -50,6 +53,8 @@ public interface UserService {
 	int undoDeleteBlog(Integer blogId, Integer userId);
 	
 	int cachBlog(NewBlog blog, Integer userId);
+	
+	int publishBlog(NewBlog blog, Integer userId);
 	
 	int createComment(Comment comment, Integer userId);
 	

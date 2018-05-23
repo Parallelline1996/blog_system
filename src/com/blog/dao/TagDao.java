@@ -1,6 +1,8 @@
 package com.blog.dao;
 
 
+import java.util.List;
+
 import com.blog.domain.Tag;
 
 public interface TagDao {
@@ -12,4 +14,6 @@ public interface TagDao {
 	boolean setTag(Integer tagId, Integer blogId);
 	
 	Tag findTagById(Integer tagId);
+	
+	List<Tag> findTagByUserId(Integer userId);
 }

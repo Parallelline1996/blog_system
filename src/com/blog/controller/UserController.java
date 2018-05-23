@@ -140,6 +140,22 @@ public class UserController {
 		return null;
 	}
 	
+	// 根据用户查询标签
+	@ResponseBody
+	@RequestMapping("/tagById")
+	public List<Tag> selectTagByUserId() {
+		HttpSession session = request.getSession();
+		Integer userId = (Integer)session.getAttribute("userId");
+		return userService.selectTagById(userId);
+	}
+	
+	@ResponseBody
+	@RequestMapping("/tagByBlogId/{blogId}")
+	public List<Tag> selectTagByBlogId(@PathVariable("blogId") Integer blogId) {
+		return userService.selectTagByBlog(blogId);
+	}
+
+	
 	
 	// 点赞
 	@ResponseBody
@@ -234,6 +250,14 @@ public class UserController {
 		return userService.undoDeleteBlog(blogId, userId);
 	}
 	
+	// 发表缓存博客
+	@ResponseBody
+	@RequestMapping(value = "/publishBlog")
+	public int publishBlog(@RequestBody NewBlog blog) {
+		//HttpSession session = request.getSession();
+		//Integer userId = (Integer)session.getAttribute("userId");
+		return 200;
+	}
 	
 	// 未完成
 	// 缓存博客

@@ -171,6 +171,30 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public List<Tag> selectTagById(Integer userId) {
+		return tagDao.findTagByUserId(userId);
+	}
+	
+	@Override
+    public List<Tag> selectTagByBlog(Integer blogId) {
+		Blog blog = blogDao.findBlogById(blogId);
+		if (blog == null) {
+			// 不存在
+			return null;
+		}
+		Set<Tag> tags = blog.getTags();
+		System.out.println(tags);
+		
+		List<Tag> tag = new ArrayList<>();
+		for (Tag t : tags) {
+			Tag temp = new Tag(t.getTagId(), t.getUserId(), t.getTagContent(), null);
+			tag.add(temp);
+		}
+		return tag;
+	}
+	
+	
+	@Override
 	public boolean createBlog(NewBlog newBlog, Integer userId) {
 		Timestamp tx = new Timestamp(new Date().getTime());
 		List<Integer> temp = newBlog.getTags();
@@ -251,6 +275,11 @@ public class UserServiceImpl implements UserService {
 	public int cachBlog(NewBlog blog, Integer userId) {
 		return 200;
 		//return blogDao.cachBlog(blog);
+	}
+	
+	@Override
+	public int publishBlog(NewBlog blog, Integer userId) {
+		return 200;
 	}
 
 	@Override

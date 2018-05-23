@@ -37,7 +37,7 @@ public class Blog {
 		return "Blog [blogId=" + blogId + ", blogTitle=" + blogTitle + ", blogContent=" + blogContent
 				+ ", numberOfAgree=" + numberOfAgree + ", numberOfDisagree=" + numberOfDisagree + ", blogState="
 				+ blogState + ", postTime=" + postTime + ", lastModifiedTime=" + lastModifiedTime + ", userId=" + userId
-				+ ", tags=" + tags + "]";
+				+ "]";
 	}
 	@Override
 	public int hashCode() {

@@ -75,7 +75,7 @@ public class Tag {
 	}
 	@Override
 	public String toString() {
-		return "Tag [tagId=" + tagId + ", userId=" + userId + ", tagContent=" + tagContent + ", blogs=" + blogs + "]";
+		return "Tag [tagId=" + tagId + ", userId=" + userId + ", tagContent=" + tagContent+ "]";
 	}
 	public Tag(Integer tagId, Integer userId, String tagContent, Set<Blog> blogs) {
 		super();
