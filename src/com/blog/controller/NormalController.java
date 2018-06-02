@@ -46,6 +46,7 @@ public class NormalController {
 	@ResponseBody
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public int login(@RequestBody LoginData data) {
+		
 		HttpSession session = request.getSession();
 		session.setAttribute("userId", 1);
 		if (data.getCode() == 1) {
