@@ -7,6 +7,7 @@ import com.blog.domain.Tag;
 import com.blog.domain.User;
 import com.blog.util.request.BlogWithTag;
 import com.blog.util.request.NewBlog;
+import com.blog.util.request.TagList;
 import com.blog.util.response.BlogList;
 import com.blog.util.response.UserSimpleData;
 
@@ -24,7 +25,7 @@ public interface UserService {
 	
 	int numberOfFans(Integer ownId);
 	
-	boolean createTag(Tag tag, Integer userId);
+	List<Integer> createTag(TagList tags, Integer userId);
 	
 	boolean deleteTag(Integer tagId);
 	

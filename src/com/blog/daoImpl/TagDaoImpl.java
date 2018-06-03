@@ -6,6 +6,7 @@ import java.util.Set;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Repository;
@@ -29,8 +30,21 @@ public class TagDaoImpl extends HibernateUtil implements TagDao {
 	private SessionFactory sessionFactory;
 	
 	@Override
-	public boolean createTag(Tag tag) {
-		return save(tag);
+	public int createTag(Tag tag) {
+		Session session = sessionFactory.openSession();
+		Transaction tx = session.beginTransaction();
+		int temp = -1;
+		try {
+			session.save(tag);
+			temp = tag.getTagId();
+			tx.commit();
+		} catch (Exception e) {
+			tx.rollback();
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return temp;
 	}
 
 	@Override

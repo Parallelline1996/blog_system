@@ -20,6 +20,7 @@ import com.blog.domain.User;
 import com.blog.service.UserService;
 import com.blog.util.request.BlogWithTag;
 import com.blog.util.request.NewBlog;
+import com.blog.util.request.TagList;
 import com.blog.util.response.BlogList;
 import com.blog.util.response.UserSimpleData;
 
@@ -96,14 +97,13 @@ public class UserController {
 	// 创建标签，只需要上传标签的内容即可
 	@ResponseBody
 	@RequestMapping(value = "/createTag", method = RequestMethod.POST)
-	public int createTag(@RequestBody Tag tag) {
+	public List<Integer> createTag(@RequestBody TagList tag) {
 		HttpSession session = request.getSession();
 		Integer userId = (Integer)session.getAttribute("userId");
-		if (userService.createTag(tag, userId)) {
-			return 200;
-		} else {
-			return -1;
+		if (userId == null) {
+			return null;
 		}
+		return userService.createTag(tag, userId);
 	}
 	
 	// 删除标签

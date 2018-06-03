@@ -47,13 +47,17 @@ public class NormalController {
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public int login(@RequestBody LoginData data) {
 		
-		HttpSession session = request.getSession();
-		session.setAttribute("userId", 1);
-		if (data.getCode() == 1) {
-			// 如果用户为管理员，做标记
-			session.setAttribute("isAdmin", 1);
+		
+		int temp = accountService.login(data);
+		if (temp > 0) {
+			HttpSession session = request.getSession();
+			session.setAttribute("userId", temp);
+			if (data.getCode() == 1) {
+				// 如果用户为管理员，做标记
+				session.setAttribute("isAdmin", temp);
+			}
 		}
-		return accountService.login(data);
+		return temp;
 	}
 	
 	// 查看博客列表

@@ -23,6 +23,7 @@ import com.blog.domain.User;
 import com.blog.service.UserService;
 import com.blog.util.request.BlogWithTag;
 import com.blog.util.request.NewBlog;
+import com.blog.util.request.TagList;
 import com.blog.util.response.BlogList;
 import com.blog.util.response.UserSimpleData;
 
@@ -130,9 +131,16 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean createTag(Tag tag, Integer userId) {
-		tag.setUserId(userId);
-		return tagDao.createTag(tag);
+	public List<Integer> createTag(TagList tags, Integer userId) {
+		List<Integer> number = new ArrayList<>();
+		List<String> strings = tags.getTagContent();
+		for (String t : strings) {
+			Tag tag = new Tag();
+			tag.setUserId(userId);
+			tag.setTagContent(t);
+			number.add(tagDao.createTag(tag));
+		}
+		return number;
 	}
 
 	@Override

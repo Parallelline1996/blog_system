@@ -7,7 +7,7 @@ import com.blog.domain.Tag;
 
 public interface TagDao {
 
-	boolean createTag(Tag tag);
+	int createTag(Tag tag);
 	
 	boolean deleteTag(Tag tag);
 	
