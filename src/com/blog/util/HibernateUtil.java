@@ -8,7 +8,11 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 
-
+/**
+ * Hibernate的工具类
+ * @author parallel
+ *
+ */
 public class HibernateUtil {
 
 	@Autowired

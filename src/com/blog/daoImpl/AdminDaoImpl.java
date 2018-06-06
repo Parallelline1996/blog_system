@@ -25,7 +25,7 @@ public class AdminDaoImpl extends HibernateUtil implements AdminDao {
 		Session session = sessionFactory.openSession();
 		Transaction tx = session.beginTransaction();
 		try {
-			admin = (Admin) session.get(Admin.class, adminId);
+			admin = (Admin)session.get(Admin.class, adminId);
 			tx.commit();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -35,6 +35,7 @@ public class AdminDaoImpl extends HibernateUtil implements AdminDao {
 		}
 		return admin;
 	}
+	
 	@Override
 	public boolean adminExist(String eMail) {
 		Session session = sessionFactory.openSession();
@@ -51,10 +52,12 @@ public class AdminDaoImpl extends HibernateUtil implements AdminDao {
 			session.close();
 		}
 		// 是否存在，存在的话返回的是true
-		if (admin != null)
-			return true;
+		if (admin != null) {
+			return true;			
+		}
 		return false;
 	}
+	
 	@Override
 	public int checkPassword(String eMail,String password) {
 		Session session = sessionFactory.openSession();
@@ -71,8 +74,9 @@ public class AdminDaoImpl extends HibernateUtil implements AdminDao {
 			session.close();
 		}
 		// 是否存在，存在的话返回的是true
-		if (admin == null)
+		if (admin == null) {
 			return -1;
+		}
 		return admin.getAdminId();
 	}
 }

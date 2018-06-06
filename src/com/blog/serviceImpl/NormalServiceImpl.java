@@ -65,6 +65,7 @@ public class NormalServiceImpl implements NormalService {
 		return bloglist; 
 	}
 
+	// 这里是对于未注册用户使用的
 	@Override
 	public BlogData findBlogById(Integer blogId) {
 		Blog blog = blogDao.findBlogById(blogId);
@@ -74,6 +75,10 @@ public class NormalServiceImpl implements NormalService {
 		for (Tag tag : set) {
 			System.out.println(tag.getTagContent());
 			seTags.add(tag.getTagContent());
+		}
+		// 0代表正常，1代表进入垃圾箱，2代表彻底删除，-1代表缓存
+		if (blog.getBlogState() != 0) {
+			return null;
 		}
 		BlogData data = new BlogData(blog.getBlogId(), blog.getBlogTitle(), blog.getBlogContent(), blog.getNumberOfAgree(), blog.getNumberOfDisagree(),
 				blog.getBlogState(), blog.getPostTime(), blog.getLastModifiedTime(), blog.getUserId(), seTags);

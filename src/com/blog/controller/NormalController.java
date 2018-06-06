@@ -35,20 +35,27 @@ public class NormalController {
 	@Autowired
 	private HttpServletRequest request;
 
-	// 注册功能
+	/**
+	 * 注册函数，用于新用户注册
+	 * @param user 用户的注册信息，包括昵称、密码、邮箱、手机号码
+	 * @return 整数类型，200 代表注册成功，-1 代表邮箱已经被注册，-2 代表系统异常
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/register", method = RequestMethod.POST)
 	public int register(@RequestBody User user) {
 		return accountService.createUser(user);
 	}
 	
-	// 登陆函数
+	/**
+	 * 登陆函数，用户注册用户的登陆
+	 * @param data 用户用于登陆的信息，包括密码、邮箱账号、以及code
+	 * @return 整数类型，200 代表登陆成功，-1 代表该邮箱还未注册，-2 代表密码错误
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public int login(@RequestBody LoginData data) {
-		
-		
 		int temp = accountService.login(data);
+		// 成功登陆
 		if (temp > 0) {
 			HttpSession session = request.getSession();
 			session.setAttribute("userId", temp);
@@ -60,25 +67,25 @@ public class NormalController {
 		return temp;
 	}
 	
-	// 查看博客列表
-	@ResponseBody
-	@RequestMapping(value = "/showBlog", method = RequestMethod.GET)
-	public List<BlogList> blogLists() {
-		return normalService.readBlog();
-	}
-	
-	// 查看博客列表
+	/**
+	 * 返回博客列表 这里博客的范围是所有的博客
+	 * @param page 第几页
+	 * @return 返回对应页的博客列表
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/showBlog/{page}", method = RequestMethod.GET)
 	public List<BlogList> blogListByPage(@PathVariable("page") String page) {
 		return normalService.readBlogByPage(Integer.parseInt(page));
 	}
 	
-	// 查看某一条博客的具体信息
+	/**
+	 * 查看某一个博客的具体信息
+	 * @param blogId 博客的id
+	 * @return 返回博客的具体信息
+	 */
 	@ResponseBody
 	@RequestMapping("/blogDetail/{blogId}")
 	public BlogData blogDetail(@PathVariable("blogId") String blogId) {
-		// could not write json  com.blog.domain.Blog["tags"]
 		return normalService.findBlogById(Integer.parseInt(blogId));
 	}
 }

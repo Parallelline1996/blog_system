@@ -10,6 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+/**
+ * 该类用于跨域使用
+ * @author Parallel
+ *
+ */
 @Component
 public class CORSFilter extends OncePerRequestFilter{
 

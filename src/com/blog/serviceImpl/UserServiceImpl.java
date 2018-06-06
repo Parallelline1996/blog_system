@@ -387,4 +387,15 @@ public class UserServiceImpl implements UserService {
 		}
 		return temp;
 	}
+
+	@Override
+	public User getUserData(Integer userId) {
+		if (userId == null) {
+			return null;
+		}
+		User user = userDao.findUserById(userId);
+		user.setPassword("");
+		user.setProfile(null);
+		return user;
+	}
 }

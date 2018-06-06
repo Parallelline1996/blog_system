@@ -34,7 +34,11 @@ public class UserController {
 	@Autowired
 	private HttpServletRequest request;
 	
-	// 关注
+	/**
+	 * 关注函数，添加关注
+	 * @param userId
+	 * @return 返回一个整数类型，404代表未登陆无法关注，200代表创建成功
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/createFollow/{userId}", method = RequestMethod.GET)
 	public int createFollow(@PathVariable("userId") Integer userId) {
@@ -46,7 +50,11 @@ public class UserController {
 		return userService.createFollow(ownId, userId); 
 	}
 	
-	// 取消关注
+	/**
+	 * 取消关注函数
+	 * @param userId
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/deleteFollow/{userId}", method = RequestMethod.GET)
 	public int deleteFollow(@PathVariable("userId") Integer userId) {
@@ -58,7 +66,10 @@ public class UserController {
 		return userService.deleteFollow(ownId, userId);
 	}
 	
-	// 查看关注人的列表
+	/**
+	 * 查看关注人列表
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/visitFollows", method = RequestMethod.GET)
 	public List<UserSimpleData> visitFollows() {
@@ -67,7 +78,10 @@ public class UserController {
 		return userService.visitFollows(ownId);
 	}
 	
-	// 查看粉丝的列表
+	/**
+	 * 查看粉丝列表
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/visitFans", method = RequestMethod.GET)
 	public List<UserSimpleData> visitFans() {
@@ -76,7 +90,10 @@ public class UserController {
 		return userService.visitFans(ownId);
 	}
 	
-	// 查看已关注人的总数
+	/**
+	 * 查看已经关注人数
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/numberOfFollows", method = RequestMethod.GET)
 	public int numberOfFollows() {
@@ -85,7 +102,10 @@ public class UserController {
 		return userService.numberOfFollows(ownId);
 	}
 	
-	// 查看粉丝的总数
+	/**
+	 * 查看粉丝人数
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/numberOfFans", method = RequestMethod.GET)
 	public int numberOfFans() {
@@ -94,7 +114,11 @@ public class UserController {
 		return userService.numberOfFans(ownId);
 	}
 	
-	// 创建标签，只需要上传标签的内容即可
+	/**
+	 * 创建标签
+	 * @param tag 批量标签内容
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/createTag", method = RequestMethod.POST)
 	public List<Integer> createTag(@RequestBody TagList tag) {
@@ -106,7 +130,11 @@ public class UserController {
 		return userService.createTag(tag, userId);
 	}
 	
-	// 删除标签
+	/**
+	 * 删除标签
+	 * @param tagId
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/deleteTag/{tagId}")
 	public int deleteTag(@PathVariable("tagId") Integer tagId) {
@@ -118,8 +146,11 @@ public class UserController {
 		}
 	}
 	
-
-	// 设置标签
+	/**
+	 * 设置标签
+	 * @param data
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping("/setTag")
 	public int setTag(@RequestBody BlogWithTag data) {
@@ -140,7 +171,10 @@ public class UserController {
 		return null;
 	}
 	
-	// 根据用户查询标签
+	/**
+	 * 根据用户查询标签
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping("/tagById")
 	public List<Tag> selectTagByUserId() {
@@ -154,10 +188,12 @@ public class UserController {
 	public List<Tag> selectTagByBlogId(@PathVariable("blogId") Integer blogId) {
 		return userService.selectTagByBlog(blogId);
 	}
-
 	
-	
-	// 点赞
+	/**
+	 * 点赞
+	 * @param blogId
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/agree/{blogId}", method = RequestMethod.GET)
 	public int agree(@PathVariable("blogId") Integer blogId) {
@@ -171,7 +207,11 @@ public class UserController {
 
 	}
 	
-	// 点踩
+	/**
+	 * 点踩
+	 * @param blogId
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/disagree/{blogId}", method = RequestMethod.GET)
 	public int disagree(@PathVariable("blogId") Integer blogId) {
@@ -184,10 +224,11 @@ public class UserController {
 		}
 	}
 	
-	/*
-	 * 需传入: userId, nickName, eMail, phoneNumber, profile;
-	*/
-	// 更新用户信息
+	/**
+	 * 更新用户信息
+	 * @param user 包括：userId, nickName, eMail, phoneNumber, profile
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping("/updateUserData")
 	public int updateUserData(@RequestBody User user) {
@@ -196,10 +237,11 @@ public class UserController {
 		return userService.updateUserData(user, userId);
 	}
 	
-	/* 
-	 * 前端传入的参数：blogTitle, blogContent, tags 
-	 * */
-	// 新增博客 
+	/**
+	 * 新增博客 
+	 * @param newBlog：包括blogTitle, blogContent, tags
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping("/createBlog")
 	public int createBlog(@RequestBody NewBlog newBlog) {
@@ -319,7 +361,11 @@ public class UserController {
 		return userService.allCommentYouGet(userId, page);
 	}
 	
-	
+	/**
+	 * 查看用户个人博客
+	 * @param page 页面
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping("/blog/{page}")
 	public List<BlogList> blog(@PathVariable("page") Integer page) {
@@ -328,6 +374,11 @@ public class UserController {
 		return userService.blog(userId, page);
 	}
 	
+	/**
+	 * 查看草稿箱列表
+	 * @param page
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping("/cachBlog/{page}")
 	public List<BlogList> cachBlog(@PathVariable("page") Integer page) {
@@ -336,11 +387,28 @@ public class UserController {
 		return userService.cachBlog(userId, page);
 	}
 	
+	/**
+	 * 查看垃圾箱博客列表
+	 * @param page
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping("/trashBinBlog/{page}")
 	public List<BlogList> trashBinBlog(@PathVariable("page") Integer page) {
 		HttpSession session = request.getSession();
 		Integer userId = (Integer)session.getAttribute("userId");
 		return userService.trashBinBlog(userId, page);
+	}
+	
+	/**
+	 * 获取用户个人信息
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/getUserData")
+	public User getUserData() {
+		HttpSession session = request.getSession();
+		Integer userId = (Integer)session.getAttribute("userId");
+		return userService.getUserData(userId);
 	}
 }

@@ -70,4 +70,6 @@ public interface UserService {
 	List<BlogList> cachBlog(Integer userId, int page);
 	
 	List<BlogList> trashBinBlog(Integer userId, int page);
+	
+	User getUserData(Integer userId);
 }

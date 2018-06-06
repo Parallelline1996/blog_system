@@ -19,9 +19,7 @@ import com.blog.service.AdminService;
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-	
-	// 差一个管理员的检验问题，以及删除时的联级问题
-	
+
 	@Autowired
 	@Qualifier("adminServiceImpl")
 	private AdminService adminService;
@@ -29,19 +27,11 @@ public class AdminController {
 	@Autowired
 	private HttpServletRequest request;
 
-	// 返回所有的用户信息
-	@ResponseBody
-	@RequestMapping(value = "/allUsers", method = RequestMethod.GET)
-	public List<User> allUser() {
-		HttpSession session = request.getSession();
-		Integer isAdmin = (Integer)session.getAttribute("isAdmin");
-		if (isAdmin != 1) {
-			return null;
-		}
-		return adminService.allUsers();
-	}
-	
-	// 对上方的函数进行分页处理，固定为每页5条，传入参数为第几页
+	/**
+	 * 返回用户列表
+	 * @param pageNumber 页码
+	 * @return 返回某一页的所有用户信息
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/allUsers/{pageNumber}", method = RequestMethod.GET)
 	public List<User> allUserByPage(@PathVariable("pageNumber") String pageNumber){
@@ -53,7 +43,11 @@ public class AdminController {
 		return adminService.allUserByPage(Integer.parseInt(pageNumber));
 	}
 	
-	// 按照id查找用户信息
+	/**
+	 * 按照id查找用户信息
+	 * @param userId
+	 * @return 返回用户的具体信息
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/findUserByID/{userId}", method = RequestMethod.GET)
 	public User findUser(@PathVariable("userId") Integer userId) {
@@ -65,7 +59,11 @@ public class AdminController {
 		return adminService.findUserById(userId);
 	}
 
-	// 删除用户
+	/**
+	 * 删除用户
+	 * @param userId
+	 * @return 整数类型，404 代表非管理员操作，-1 代表删除失败，200 代表删除成功
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/deleteUser/{userId}", method = RequestMethod.GET)
 	public int deleteUser(@PathVariable("userId") Integer userId) {
@@ -74,6 +72,8 @@ public class AdminController {
 		if (isAdmin != 1) {
 			return 404;
 		}
+		// 这里要修改一下，当删除用户时，他发表过的 blog 都要置为删除状态
+		// 评论不做处理
 		if (adminService.deleteUser(userId)) {
 			return 200;
 		} else {

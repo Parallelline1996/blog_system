@@ -32,6 +32,7 @@ public class BlogDaoImpl extends HibernateUtil implements BlogDao {
 	@Override
 	public boolean deleteBlog(Integer blogId) {
 		Blog blog = findBlogById(blogId);
+		// 设置为2，代表彻底删除
 		blog.setBlogState(2);
 		return save(blog);
 	}
@@ -53,34 +54,13 @@ public class BlogDaoImpl extends HibernateUtil implements BlogDao {
 	public Blog findBlogById(Integer blogId) {
 		Blog blog = null;
 		Session session = sessionFactory.openSession();
-		//Transaction transaction = session.beginTransaction();
 		try {
 			blog = (Blog) session.get(Blog.class, blogId);
-			//transaction.commit();
-		} catch (Exception e) {
-			e.printStackTrace();
-			//transaction.rollback();
-		} finally {
-			session.close();
-		}/*
-		String hql = "select tag.tagId from blog_tag where blogId = ?";
-		Query query = null;
-		try {
-			session = sessionFactory.openSession();
-			query = session.createQuery(hql).setParameter(0, blogId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
 			session.close();
 		}
-		Set<Integer> temp = new HashSet<>();
-		if (query != null) {
-			List<Object> o = query.list();
-			for (Object object : o) {
-				temp.add((Integer)object);
-			}
-		}*/
-		
 		return blog;
 	}
 
