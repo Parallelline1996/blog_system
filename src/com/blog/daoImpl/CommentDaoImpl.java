@@ -3,6 +3,7 @@ package com.blog.daoImpl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +30,28 @@ public class CommentDaoImpl extends HibernateUtil implements CommentDao {
 	@Override
 	public boolean deleteComment(Integer commentId) {
 		Comment comment = findCommentById(commentId);
+		// 将评论状态置为1
 		comment.setStatus(1);
 		return save(comment);
 	}
 
+	@Override
+    public int numberOfCommentYouMade(Integer userId) {
+		int number = 0;
+		Session session = sessionFactory.openSession();
+		String hql = "from Comment where userId = " + userId +" and status = 0";
+		try {
+			Query query = session.createQuery(hql);
+			// 转为List，然后统计数目size
+			number = (int)query.list().size();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return number;
+	}
+	
 	@Override
 	public List<Comment> allCommentYouMade(Integer userId, Integer page) {
 		String hql = "from Comment where userId = " + userId +" and status = 0";

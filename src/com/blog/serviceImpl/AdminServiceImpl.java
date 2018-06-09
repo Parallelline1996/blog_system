@@ -19,11 +19,6 @@ public class AdminServiceImpl implements AdminService {
 	private UserDao userDao;
 	
 	@Override
-	public List<User> allUsers() {
-		return userDao.allUser();
-	}
-	
-	@Override
 	public List<User> allUserByPage(int page) {
 		return userDao.allUserByPage(page);
 	}

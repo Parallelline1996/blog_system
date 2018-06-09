@@ -22,7 +22,7 @@ public interface AdminDao {
 	 * 检查邮箱账号与密码是否相符
 	 * @param email 邮箱账号
 	 * @param password 密码
-	 * @return int类型 -1代表邮箱账号不存在，大于零的数值表示管理员的id
+	 * @return 整数类型 -1代表邮箱账号不存在，大于零的数值表示管理员的id
 	 */
 	int checkPassword(String email,String password);
 }

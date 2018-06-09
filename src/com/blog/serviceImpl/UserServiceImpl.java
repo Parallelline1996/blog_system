@@ -57,11 +57,11 @@ public class UserServiceImpl implements UserService {
 	private CommentDao commentDao;
 	
 	@Override
-	public int createFollow(Integer ownId, Integer userId) {
-		if (followDao.existFollow(ownId, userId)) {
+	public int createFollow(Integer fanId, Integer userId) {
+		if (followDao.existFollow(fanId, userId)) {
 			// -1 代表已经关注
 			return -1;
-		} else if (followDao.createFollow(ownId, userId)) {
+		} else if (followDao.createFollow(fanId, userId)) {
 			return 200;
 		} else {
 			// -2 代表系统异常
@@ -221,11 +221,13 @@ public class UserServiceImpl implements UserService {
 	public int deleteBlog(Integer blogId, Integer userId) {
 		Blog blog = blogDao.findBlogById(blogId);
 		if (blog.getBlogState() == 2 || blog.getUserId() != userId) {
+			// 博客已被删除或非本人操作
 			return -1;
 		} else {
 			if (blogDao.deleteBlog(blogId)) {
 				return 200;
 			} else {
+				// 删除错误
 				return -2;
 			}
 		}
@@ -297,10 +299,22 @@ public class UserServiceImpl implements UserService {
 			return -1;
 		} else {
 			User newUser = userDao.findUserById(userId);
-			newUser.setNickName(user.getNickName());
-			newUser.setPhoneNumber(user.getPhoneNumber());
-			newUser.seteMail(user.geteMail());
-			newUser.setProfile(user.getProfile());
+			if (userDao.checkPassword(newUser.geteMail(), user.getPassword()) == -1) {
+				// 表示密码错误
+				return -3;
+			}
+			if (user.getNickName() != null) {
+				newUser.setNickName(user.getNickName());				
+			}
+			if (user.getPhoneNumber() != null) {
+				newUser.setPhoneNumber(user.getPhoneNumber());				
+			}
+			if (user.geteMail() != null) {
+				newUser.seteMail(user.geteMail());				
+			}
+			if (user.getProfile() != null) {
+				newUser.setProfile(user.getProfile());				
+			}
 			if (userDao.updateUserData(newUser)) {
 				return 200;
 			} else {
@@ -348,6 +362,15 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	@Override
+	public int numberOfCommentYouMade(Integer userId) {
+		if (userId == null) {
+			return -1;
+		}
+		return commentDao.numberOfCommentYouMade(userId);
+	}
+
+	
 	@Override
 	public List<Comment> allCommentYouMade(Integer userId, Integer page) {
 		return commentDao.allCommentYouMade(userId, page);

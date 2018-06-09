@@ -77,20 +77,37 @@ public interface BlogDao {
 	List<Blog> allBlogById(Integer userId);
 	
 	/**
-	 * 
+	 * 展示所有的博客
 	 * @param pageNo
 	 * @param pageNum
 	 * @return
 	 */
 	List<Blog> listPageAllBlog(int pageNo, int pageNum);
 	
-	List<Blog> listPageAllBlogById(int pageNo, int pageNum);
-	
+	// 未完成
 	List<BlogList> selectTag(Blog blog, Integer tagId);
 	
+	/**
+	 * 分页展示用户的所有blog
+	 * @param userId 用户Id
+	 * @param pageNo 页码
+	 * @return 博客List
+	 */
 	List<Blog> listPageBlog(int userId, int pageNo);
 	
+	/**
+	 * 分页展示缓存中的博客
+	 * @param userId 用户id
+	 * @param pageNo 页码
+	 * @return 博客list
+	 */
 	List<Blog> listPageCachBlog(int userId, int pageNo);
 	
+	/**
+	 * 分页展示回收站里的博客
+	 * @param userId 用户id
+	 * @param pageNo 页码
+	 * @return 博客List
+	 */
 	List<Blog> listPageTrashBinBlog(int userId, int pageNo);
 }

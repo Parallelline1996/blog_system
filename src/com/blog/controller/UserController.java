@@ -36,24 +36,24 @@ public class UserController {
 	
 	/**
 	 * 关注函数，添加关注
-	 * @param userId
-	 * @return 返回一个整数类型，404代表未登陆无法关注，200代表创建成功
+	 * @param userId 操作人的id，即用户id
+	 * @return 返回一个整数类型，404 代表未登陆无法关注，200 代表创建成功，-1 代表已关注
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/createFollow/{userId}", method = RequestMethod.GET)
 	public int createFollow(@PathVariable("userId") Integer userId) {
 		HttpSession session = request.getSession();
-		Integer ownId = (Integer)session.getAttribute("userId");
-		if (ownId == null) {
+		Integer fanId = (Integer)session.getAttribute("userId");
+		if (fanId == null) {
 			return 404;
 		}
-		return userService.createFollow(ownId, userId); 
+		return userService.createFollow(fanId, userId); 
 	}
 	
 	/**
 	 * 取消关注函数
-	 * @param userId
-	 * @return
+	 * @param userId 操作人的id，即用户id
+	 * @return 返回一个整数类型，404代表未登陆无法进行操作，200 代表取消关注成功，-1 代表实际上并未关注
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/deleteFollow/{userId}", method = RequestMethod.GET)
@@ -68,7 +68,7 @@ public class UserController {
 	
 	/**
 	 * 查看关注人列表
-	 * @return
+	 * @return 用户简单信息列表
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/visitFollows", method = RequestMethod.GET)
@@ -80,7 +80,7 @@ public class UserController {
 	
 	/**
 	 * 查看粉丝列表
-	 * @return
+	 * @return 用户简单信息列表
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/visitFans", method = RequestMethod.GET)
@@ -92,7 +92,7 @@ public class UserController {
 	
 	/**
 	 * 查看已经关注人数
-	 * @return
+	 * @return 整数类型，负数代表操作失败，非负数代表人数
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/numberOfFollows", method = RequestMethod.GET)
@@ -103,8 +103,8 @@ public class UserController {
 	}
 	
 	/**
-	 * 查看粉丝人数
-	 * @return
+	 * 查看粉丝人数 
+	 * @return 整数类型，负数代表操作失败，非负数代表人数
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/numberOfFans", method = RequestMethod.GET)
@@ -117,7 +117,7 @@ public class UserController {
 	/**
 	 * 创建标签
 	 * @param tag 批量标签内容
-	 * @return
+	 * @return list，标签插入到数据库中，对应的标签Id的list
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/createTag", method = RequestMethod.POST)
@@ -132,8 +132,8 @@ public class UserController {
 	
 	/**
 	 * 删除标签
-	 * @param tagId
-	 * @return
+	 * @param tagId 要删除标签的id
+	 * @return 整数类型，200 代表成功，-1 代表错误
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/deleteTag/{tagId}")
@@ -148,8 +148,8 @@ public class UserController {
 	
 	/**
 	 * 设置标签
-	 * @param data
-	 * @return
+	 * @param data 设置标签的博客id和标签id
+	 * @return 整数类型，200 代表成功，-1 代表失败
 	 */
 	@ResponseBody
 	@RequestMapping("/setTag")
@@ -173,7 +173,7 @@ public class UserController {
 	
 	/**
 	 * 根据用户查询标签
-	 * @return
+	 * @return 标签list
 	 */
 	@ResponseBody
 	@RequestMapping("/tagById")
@@ -183,6 +183,11 @@ public class UserController {
 		return userService.selectTagById(userId);
 	}
 	
+	/**
+	 * 根据博客Id查询标签
+	 * @param blogId 博客id
+	 * @return 标签list
+	 */
 	@ResponseBody
 	@RequestMapping("/tagByBlogId/{blogId}")
 	public List<Tag> selectTagByBlogId(@PathVariable("blogId") Integer blogId) {
@@ -191,8 +196,8 @@ public class UserController {
 	
 	/**
 	 * 点赞
-	 * @param blogId
-	 * @return
+	 * @param blogId 博客Id
+	 * @return 整数类型，200 代表成功，-1 代表失败
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/agree/{blogId}", method = RequestMethod.GET)
@@ -209,8 +214,8 @@ public class UserController {
 	
 	/**
 	 * 点踩
-	 * @param blogId
-	 * @return
+	 * @param blogId 博客id
+	 * @return 整数类型，200 代表成功，-1 代表失败
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/disagree/{blogId}", method = RequestMethod.GET)
@@ -226,8 +231,8 @@ public class UserController {
 	
 	/**
 	 * 更新用户信息
-	 * @param user 包括：userId, nickName, eMail, phoneNumber, profile
-	 * @return
+	 * @param user 包括：userId, password, nickName, eMail, phoneNumber, profile
+	 * @return 整数类型，200 代表修改成功，-1 代表对非本人的数据进行修改，-2 代表更新错误，-3 代表密码错误
 	 */
 	@ResponseBody
 	@RequestMapping("/updateUserData")
@@ -240,7 +245,7 @@ public class UserController {
 	/**
 	 * 新增博客 
 	 * @param newBlog：包括blogTitle, blogContent, tags
-	 * @return
+	 * @return 整数类型，200 代表成功，-1 代表失败
 	 */
 	@ResponseBody
 	@RequestMapping("/createBlog")
@@ -255,7 +260,11 @@ public class UserController {
 		}
 	}
 	
-	// 直接删除博客(可以在垃圾回收站处删除，也可以直接在文章里删除)
+	/**
+	 * 删除博客（可以在垃圾回收站处删除，也可以直接在文章里删除）
+	 * @param blogId 博客id
+	 * @return 整数类型，200 代表成功，-1 代表非本人操作，-2 代表操作错误
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/deleteBlog/{blogId}", method = RequestMethod.GET)
 	public int deleteBlog(@PathVariable("blogId") Integer blogId) {
@@ -264,7 +273,11 @@ public class UserController {
 		return userService.deleteBlog(blogId, userId);
 	}
 	
-	// 将博客放入垃圾回收站
+	/**
+	 * 将博客放入垃圾回收站
+	 * @param blogId 博客id
+	 * @return 整数类型，200 代表成功，-1 代表非本人操作，-2 代表操作错误
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/deleteBlogToTrashBin/{blogId}", method = RequestMethod.GET)
 	public int deleteBlogToTrashBin(@PathVariable("blogId") Integer blogId) {
@@ -273,7 +286,11 @@ public class UserController {
 		return userService.deleteBlogToTrashBin(blogId, userId);
 	}
 	
-	// 更新博客
+	/**
+	 * 更新博客
+	 * @param blog 博客信息
+	 * @return 整数类型，200 代表成功，-1 代表非本人操作，-2 代表操作错误
+	 */
 	@ResponseBody
 	@RequestMapping("/updateBlog")
 	public int updateBlog(@RequestBody NewBlog blog) {
@@ -282,8 +299,11 @@ public class UserController {
 		return userService.updateBlog(blog, userId);
 	}
 	
-	
-	// 撤销删除博客
+	/**
+	 * 撤销删除博客
+	 * @param blogId 博客Id
+	 * @return 整数类型，200 代表成功，-1 代表非本人操作，-2 代表操作错误
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/undoDeleteBlog/{blogId}", method = RequestMethod.GET)
 	public int undoDeleteBlog(@PathVariable("blogId") Integer blogId) {
@@ -293,6 +313,7 @@ public class UserController {
 	}
 	
 	// 发表缓存博客
+	// 未完成
 	@ResponseBody
 	@RequestMapping(value = "/publishBlog")
 	public int publishBlog(@RequestBody NewBlog blog) {
@@ -311,15 +332,11 @@ public class UserController {
 		return userService.cachBlog(blog, userId);
 	}
 	
-	
-	/*
-	 * {传入的信息：
-	"commentObjectId":1,
-	"content":"good",
-	"objectOption":1,
-	"userId":1
-	 * */
-	// 评论
+	/**
+	 * 发表评论
+	 * @param comment 评论的信息，包括：commentObjectId, content, objectOption, userId
+	 * @return
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/createComment", method = RequestMethod.POST)
 	public int createComment(@RequestBody Comment comment) {
@@ -330,7 +347,11 @@ public class UserController {
 	
 	
 	// 目前只支持删除自己写的评论的操作
-	// 删除评论
+	/**
+	 * 删除自己写的评论
+	 * @param commentId 评论id
+ 	 * @return 整数类型，200 代表成功，-1 代表非本人操作，-2 代表操作错误
+	 */
 	@ResponseBody
 	@RequestMapping(value = "/deleteComment/{commentId}", method = RequestMethod.GET)
 	public int deleteComment(@PathVariable("commentId") Integer commentId) {
@@ -340,7 +361,11 @@ public class UserController {
 	}
 	
 	
-	// 你所评论过的所有评论
+	/**
+	 * 分页展示用户所写的所有评论
+	 * @param page 页码
+	 * @return 评论List
+	 */
 	@ResponseBody
 	@RequestMapping("/allCommentYouMade/{page}")
 	public List<Comment> allCommentYouMade(@PathVariable("page") Integer page) {
@@ -349,9 +374,20 @@ public class UserController {
 		return userService.allCommentYouMade(userId, page);
 	}
 	
-	/*
-	 * 疑问：要怎么传
-	 * */
+	/**
+	 * 你所评论过的所有评论的数目
+	 * @return 整数类型，-1 代表未登录，非负整数代表数目
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/theNumberOfCommentYouMake", method = RequestMethod.GET)
+	public int theNumberAllCommentYouMade() {
+		HttpSession session = request.getSession();
+		Integer userId = (Integer)session.getAttribute("userId");
+		return userService.numberOfCommentYouMade(userId);
+	}
+	
+	
+	// 未完成
 	// 你所获得的所有评论
 	@ResponseBody
 	@RequestMapping("/allCommentYouGet/{page}")
@@ -362,12 +398,12 @@ public class UserController {
 	}
 	
 	/**
-	 * 查看用户个人博客
+	 * 分页查看用户个人博客
 	 * @param page 页面
-	 * @return
+	 * @return 博客List
 	 */
 	@ResponseBody
-	@RequestMapping("/blog/{page}")
+	@RequestMapping(value = "/blog/{page}", method = RequestMethod.GET)
 	public List<BlogList> blog(@PathVariable("page") Integer page) {
 		HttpSession session = request.getSession();
 		Integer userId = (Integer)session.getAttribute("userId");
@@ -375,12 +411,12 @@ public class UserController {
 	}
 	
 	/**
-	 * 查看草稿箱列表
-	 * @param page
-	 * @return
+	 * 分页查看草稿箱列表
+	 * @param page 页码
+	 * @return 博客List
 	 */
 	@ResponseBody
-	@RequestMapping("/cachBlog/{page}")
+	@RequestMapping(value = "/cachBlog/{page}", method = RequestMethod.GET)
 	public List<BlogList> cachBlog(@PathVariable("page") Integer page) {
 		HttpSession session = request.getSession();
 		Integer userId = (Integer)session.getAttribute("userId");
@@ -388,12 +424,12 @@ public class UserController {
 	}
 	
 	/**
-	 * 查看垃圾箱博客列表
-	 * @param page
-	 * @return
+	 * 分页查看垃圾箱博客列表
+	 * @param page 页码
+	 * @return 博客list
 	 */
 	@ResponseBody
-	@RequestMapping("/trashBinBlog/{page}")
+	@RequestMapping(value = "/trashBinBlog/{page}", method = RequestMethod.GET)
 	public List<BlogList> trashBinBlog(@PathVariable("page") Integer page) {
 		HttpSession session = request.getSession();
 		Integer userId = (Integer)session.getAttribute("userId");
@@ -402,10 +438,10 @@ public class UserController {
 	
 	/**
 	 * 获取用户个人信息
-	 * @return
+	 * @return 用户信息
 	 */
 	@ResponseBody
-	@RequestMapping("/getUserData")
+	@RequestMapping(value = "/getUserData", method = RequestMethod.GET)
 	public User getUserData() {
 		HttpSession session = request.getSession();
 		Integer userId = (Integer)session.getAttribute("userId");

@@ -36,6 +36,7 @@ public class TagDaoImpl extends HibernateUtil implements TagDao {
 		int temp = -1;
 		try {
 			session.save(tag);
+			// 获取 Hibernate 自动为用户生成的Id
 			temp = tag.getTagId();
 			tx.commit();
 		} catch (Exception e) {

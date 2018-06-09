@@ -26,6 +26,8 @@ public class CORSFilter extends OncePerRequestFilter{
         response.addHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
         response.addHeader("Access-Control-Allow-Headers", "\"X-Requested-With, accept, content-type, xxxx");
         response.addHeader("Access-Control-Max-Age", "1800");//30 min
+        
+        // 
         response.setHeader("Access-Control-Allow-Credentials", "true");
         filterChain.doFilter(request, response);
 

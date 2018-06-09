@@ -130,13 +130,6 @@ public class BlogDaoImpl extends HibernateUtil implements BlogDao {
 	}
 
 	@Override
-	public List<Blog> listPageAllBlogById(int pageNo, int pageNum) {
-		// TODO Auto-generated method stub
-		// 暂时不完成
-		return null;
-	}
-
-	@Override
 	public List<BlogList> selectTag(Blog blog, Integer tagId) {
 		// 暂时跳过
 		return null;

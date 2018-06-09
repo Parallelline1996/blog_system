@@ -15,7 +15,17 @@ public interface AdminService {
 	 */
 	List<User> allUserByPage(int page);
 
+	/**
+	 * 通过用户 id 查找用户信息
+	 * @param userId 用户id
+	 * @return 用户信息
+	 */
 	User findUserById(Integer userId);
 	
+	/**
+	 * 通过用户 id 删除用户
+	 * @param userId 用户id
+	 * @return boolean
+	 */
 	boolean deleteUser(Integer userId);
 }
