@@ -3,6 +3,7 @@ package com.blog.daoImpl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -118,6 +119,24 @@ public class UserDaoImpl extends HibernateUtil implements UserDao {
 		if (user == null)
 			return -1;
 		return user.getUserId();
+	}
+
+	@Override
+	public int numberOfUser() {
+		String hql = "from User where status = 0";
+		int number = -1;
+		Session session = getSessionFactory().openSession();
+		Query query = null;
+		try {
+			query = session.createQuery(hql);
+			number = (int)query.list().size();
+		} catch (Exception e) {
+            e.printStackTrace();
+		}finally{
+			session.close();
+		}
+		
+		return number;
 	}
 
 }

@@ -25,6 +25,7 @@ import com.blog.util.request.BlogWithTag;
 import com.blog.util.request.NewBlog;
 import com.blog.util.request.TagList;
 import com.blog.util.response.BlogList;
+import com.blog.util.response.BlogListDataNew;
 import com.blog.util.response.UserSimpleData;
 
 import java.util.Set;
@@ -377,6 +378,14 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	public List<Comment> commentByBlog(Integer blogId, Integer page) {
+		if (blogId == null || page == null) {
+			return null;
+		}
+		return commentDao.findCommentByBlog(blogId, page);
+	}
+	
+	@Override
 	public List<Comment> allCommentYouGet(Integer userId, Integer page) {
 		return commentDao.allCommentYouGet(userId, page);
 	}
@@ -386,7 +395,8 @@ public class UserServiceImpl implements UserService {
 		List<Blog> blogs = blogDao.listPageBlog(userId, page);
 		List<BlogList> temp = new ArrayList<>();
 		for (Blog blog : blogs) {
-			temp.add(new BlogList(blog.getBlogId(), blog.getBlogTitle(), blog.getNumberOfAgree(), blog.getBlogState(), blog.getPostTime(), blog.getUserId()));
+			temp.add(new BlogList(blog.getBlogId(), blog.getBlogTitle(), blog.getNumberOfAgree(), 
+					blog.getBlogState(), blog.getPostTime(), blog.getUserId()));
 		}
 		return temp;
 	}
@@ -420,5 +430,39 @@ public class UserServiceImpl implements UserService {
 		user.setPassword("");
 		user.setProfile(null);
 		return user;
+	}
+
+	@Override
+	public int numberOfTrasnBinBlog(Integer userId) {
+		if (userId == null) {
+			return -1;
+		}
+		return blogDao.numberOfTrasnBinBlog(userId);
+	}
+	
+	@Override
+	public int numberOfBlog(Integer userId) {
+		if (userId == null) {
+			return -1;
+		}
+		return blogDao.numberOfBlog(userId);
+	}
+
+	@Override
+	public int numberOfUser() {
+		return userDao.numberOfUser();
+	}
+
+	@Override
+	public List<BlogListDataNew> visitOthersBlog(Integer userId, Integer page) {
+		List<Blog> blogs = blogDao.listPageBlog(userId, page);
+		List<BlogListDataNew> temp = new ArrayList<>();
+		for (Blog blog : blogs) {
+			String blogContent = blog.getBlogContent().substring(0, 200);
+			temp.add(new BlogListDataNew(blog.getBlogId(), blog.getBlogTitle(), blog.getNumberOfAgree(), 
+					blog.getPostTime(), userId, commentDao.numberOfCommentsByBlog(blog.getBlogId()), blogContent));
+		}
+		
+		return temp;
 	}
 }

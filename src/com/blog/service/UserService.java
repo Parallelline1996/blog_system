@@ -9,6 +9,7 @@ import com.blog.util.request.BlogWithTag;
 import com.blog.util.request.NewBlog;
 import com.blog.util.request.TagList;
 import com.blog.util.response.BlogList;
+import com.blog.util.response.BlogListDataNew;
 import com.blog.util.response.UserSimpleData;
 
 public interface UserService {
@@ -201,6 +202,14 @@ public interface UserService {
 	List<Comment> allCommentYouGet(Integer userId, Integer page);
 	
 	/**
+	 * 分页显示博客对应的所有评论
+	 * @param blogId 博客id
+	 * @param page 页码
+	 * @return list，评论列表
+	 */
+	List<Comment> commentByBlog(Integer blogId, Integer page);
+	
+	/**
 	 * 根据用户id分页返回博客列表
 	 * @param userId 用户id
 	 * @param page 页码
@@ -230,4 +239,32 @@ public interface UserService {
 	 * @return 用户类，返回用户的具体信息
 	 */
 	User getUserData(Integer userId);
+	
+	/**
+	 * 查看回收站的博客数目
+	 * @param userId 用户id
+	 * @return 返回整数类型，-1 代表错误，非负代表数目
+	 */
+	int numberOfTrasnBinBlog(Integer userId);
+	
+	/**
+	 * 查看普通博客数目
+	 * @param userId 用户id
+	 * @return 返回整数类型，-1 代表错误，非负代表数目
+	 */
+	int numberOfBlog(Integer userId);
+	
+	/**
+	 * 返回用户数目
+	 * @return 整数类型，代表用户人数
+	 */
+	int numberOfUser();
+	
+	/**
+	 * 访问其他用户的博客列表
+	 * @param userId 被访问用户的id
+	 * @param page 页码
+	 * @return 博客列表
+	 */
+	List<BlogListDataNew> visitOthersBlog(Integer userId, Integer page);
 }

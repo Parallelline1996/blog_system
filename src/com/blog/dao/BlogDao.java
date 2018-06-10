@@ -110,4 +110,18 @@ public interface BlogDao {
 	 * @return 博客List
 	 */
 	List<Blog> listPageTrashBinBlog(int userId, int pageNo);
+	
+	/**
+	 * 查看回收站的博客数目
+	 * @param userId 用户id
+	 * @return 返回整数类型，-1 代表错误，非负代表数目
+	 */
+	int numberOfTrasnBinBlog(Integer userId);
+	
+	/**
+	 * 查看普通博客数目
+	 * @param userId 用户id
+	 * @return 返回整数类型，-1 代表错误，非负代表数目
+	 */
+	int numberOfBlog(Integer userId);
 }

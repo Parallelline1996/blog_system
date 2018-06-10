@@ -44,4 +44,19 @@ public interface CommentDao {
 	 * @return
 	 */
 	Comment findCommentById(Integer commentId);
+	
+	/**
+	 * 分页展示博客id查看评论
+	 * @param blogId 博客id
+	 * @param page 页码
+	 * @return 评论的List
+	 */
+	List<Comment> findCommentByBlog(Integer blogId, Integer page);
+	
+	/**
+	 * 查看博客对应的评论数
+	 * @param blogId
+	 * @return 整数类型，返回评论数目
+	 */
+	int numberOfCommentsByBlog(Integer blogId);
 }

@@ -171,4 +171,40 @@ public class BlogDaoImpl extends HibernateUtil implements BlogDao {
 		return blogs;
 	}
 
+	@Override
+	public int numberOfTrasnBinBlog(Integer userId) {
+		String hql = "from Blog where userId = " + userId + " and blogState = 1";
+		int number = -1;
+		Session session = getSessionFactory().openSession();
+		Query query = null;
+		try {
+			query = session.createQuery(hql);
+			number = (int)query.list().size();
+		} catch (Exception e) {
+            e.printStackTrace();
+		}finally{
+			session.close();
+		}
+		
+		return number;
+	}
+	
+	@Override
+	public int numberOfBlog(Integer userId) {
+		String hql = "from Blog where userId = " + userId + " and blogState = 0";
+		int number = -1;
+		Session session = getSessionFactory().openSession();
+		Query query = null;
+		try {
+			query = session.createQuery(hql);
+			number = (int)query.list().size();
+		} catch (Exception e) {
+            e.printStackTrace();
+		}finally{
+			session.close();
+		}
+		
+		return number;
+	}
+
 }

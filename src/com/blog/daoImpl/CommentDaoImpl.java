@@ -88,5 +88,32 @@ public class CommentDaoImpl extends HibernateUtil implements CommentDao {
 		return comment;
 	}
 
+	@Override
+	public List<Comment> findCommentByBlog(Integer blogId, Integer page) {
+		// objectOption 评论对象的选择，1表示博客
+		String hql = "from Comment where objectOption = 1 and commentObjectId = " + blogId +" and status = 0";
+		List<Object> temp = listpage(hql, page, 5);
+		List<Comment> comments = new ArrayList<>();
+		for (Object o : temp) {
+			comments.add((Comment)o);
+		}
+		return comments;
+	}
+
+	@Override
+	public int numberOfCommentsByBlog(Integer blogId) {
+		String hql = "from Comment where ojbectOption = 1 and commentObjectId = " + blogId + " and status = 0";
+		Session session = sessionFactory.openSession();
+		int number = -1;
+		try {
+			number = (int)session.createQuery(hql).list().size();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		return number;
+	}
+
 	
 }

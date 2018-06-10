@@ -61,4 +61,10 @@ public interface UserDao {
 	 * @return 整数类型，-1 代表不匹配，非负代表该组邮箱密码对应的用户id
 	 */
 	int checkPassword(String email,String password);
+	
+	/**
+	 * 返回用户数目
+	 * @return 整数类型，代表用户人数
+	 */
+	int numberOfUser();
 }

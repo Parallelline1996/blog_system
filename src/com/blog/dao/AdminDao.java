@@ -1,16 +1,7 @@
 package com.blog.dao;
 
-import com.blog.domain.Admin;
-
 public interface AdminDao {
-	
-	/**
-	 * 根据ID查找管理员
-	 * @param adminId 管理员的ID
-	 * @return 返回管理员的具体信息
-	 */
-	Admin findAdminById(String adminId);
-	
+
 	/**
 	 * 判断邮箱账号是否存在
 	 * @param email 邮箱账号

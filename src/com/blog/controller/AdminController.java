@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.blog.domain.User;
 import com.blog.service.AdminService;
+import com.blog.service.UserService;
 
 @Controller
 @RequestMapping("/admin")
@@ -23,6 +24,10 @@ public class AdminController {
 	@Autowired
 	@Qualifier("adminServiceImpl")
 	private AdminService adminService;
+	
+	@Autowired
+	@Qualifier("userServiceImpl")
+	private UserService userService;
 	
 	@Autowired
 	private HttpServletRequest request;
@@ -79,5 +84,15 @@ public class AdminController {
 		} else {
 			return -1;
 		}
+	}
+	
+	/**
+	 * 用户总数目
+	 * @return 整数类型
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/numberOfUser", method = RequestMethod.GET)
+	public int numberOfUser() {
+		return userService.numberOfUser();
 	}
 }

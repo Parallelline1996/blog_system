@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.blog.domain.Blog;
 import com.blog.domain.Comment;
 import com.blog.domain.Tag;
 import com.blog.domain.User;
@@ -22,6 +23,7 @@ import com.blog.util.request.BlogWithTag;
 import com.blog.util.request.NewBlog;
 import com.blog.util.request.TagList;
 import com.blog.util.response.BlogList;
+import com.blog.util.response.BlogListDataNew;
 import com.blog.util.response.UserSimpleData;
 
 @Controller
@@ -367,11 +369,23 @@ public class UserController {
 	 * @return 评论List
 	 */
 	@ResponseBody
-	@RequestMapping("/allCommentYouMade/{page}")
+	@RequestMapping(value = "/allCommentYouMade/{page}", method = RequestMethod.GET)
 	public List<Comment> allCommentYouMade(@PathVariable("page") Integer page) {
 		HttpSession session = request.getSession();
 		Integer userId = (Integer)session.getAttribute("userId");
 		return userService.allCommentYouMade(userId, page);
+	}
+	
+	/**
+	 * 分页根据博客显示评论
+	 * @param page 页码
+	 * @param blog 博客信息，主要是拿其id
+	 * @return 评论List
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/commentByBlog/{page}", method = RequestMethod.POST)
+	public List<Comment> commentByBlog(@PathVariable("page") Integer page, @RequestBody Blog blog) {
+		return userService.commentByBlog(blog.getBlogId(), page);
 	}
 	
 	/**
@@ -437,6 +451,32 @@ public class UserController {
 	}
 	
 	/**
+	 * 查看回收站的博客数目
+	 * @param userId 用户id
+	 * @return 返回整数类型，-1 代表错误，非负代表数目
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/numberOfTrashBinBlog", method = RequestMethod.GET)
+	public int numberOfTrashBinBlog() {
+		HttpSession session = request.getSession();
+		Integer userId = (Integer)session.getAttribute("userId");
+		return userService.numberOfTrasnBinBlog(userId);
+	}
+	
+	/**
+	 * 查看普通博客数目
+	 * @param userId 用户id
+	 * @return 返回整数类型，-1 代表错误，非负代表数目
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/numberOfBlog", method = RequestMethod.GET)
+	public int numberOfBlog() {
+		HttpSession session = request.getSession();
+		Integer userId = (Integer)session.getAttribute("userId");
+		return userService.numberOfBlog(userId);
+	}
+	
+	/**
 	 * 获取用户个人信息
 	 * @return 用户信息
 	 */
@@ -446,5 +486,18 @@ public class UserController {
 		HttpSession session = request.getSession();
 		Integer userId = (Integer)session.getAttribute("userId");
 		return userService.getUserData(userId);
+	}
+	
+	/**
+	 * 分页查看他人的博客列表
+	 * @param page 页码
+	 * @param user 用于输入被查询者的用户id
+	 * @return list，信息列表
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/visitOthersBlog/{page}", method = RequestMethod.POST)
+	public List<BlogListDataNew> visitOthersBlog(@PathVariable("page") Integer page, @RequestBody User user) {
+		Integer userId = user.getUserId();
+		return userService.visitOthersBlog(userId, page);
 	}
 }

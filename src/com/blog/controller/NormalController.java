@@ -84,7 +84,7 @@ public class NormalController {
 	 * @return 返回博客的具体信息
 	 */
 	@ResponseBody
-	@RequestMapping("/blogDetail/{blogId}")
+	@RequestMapping(value = "/blogDetail/{blogId}", method = RequestMethod.GET)
 	public BlogData blogDetail(@PathVariable("blogId") String blogId) {
 		return normalService.findBlogById(Integer.parseInt(blogId));
 	}
