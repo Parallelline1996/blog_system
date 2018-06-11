@@ -18,6 +18,7 @@ import com.blog.domain.User;
 import com.blog.service.AccountService;
 import com.blog.service.NormalService;
 import com.blog.util.request.LoginData;
+import com.blog.util.response.BestUserData;
 import com.blog.util.response.BlogData;
 import com.blog.util.response.BlogList;
 
@@ -87,5 +88,25 @@ public class NormalController {
 	@RequestMapping(value = "/blogDetail/{blogId}", method = RequestMethod.GET)
 	public BlogData blogDetail(@PathVariable("blogId") String blogId) {
 		return normalService.findBlogById(Integer.parseInt(blogId));
+	}
+	
+	/**
+	 * 点赞数前6的用户列表
+	 * @return list
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/bestUsers", method = RequestMethod.GET)
+	public List<BestUserData> bestUsers() {
+		return normalService.bestUser();
+	}
+	
+	/**
+	 * 点赞数前6的博客列表
+	 * @return list
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/bestBlogs", method = RequestMethod.GET)
+	public List<BlogList> bestUserBlogs() {
+		return normalService.bestBlog();
 	}
 }

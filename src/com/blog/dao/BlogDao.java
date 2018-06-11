@@ -124,4 +124,10 @@ public interface BlogDao {
 	 * @return 返回整数类型，-1 代表错误，非负代表数目
 	 */
 	int numberOfBlog(Integer userId);
+	
+	/**
+	 * 最受欢迎的6篇博客
+	 * @return list
+	 */
+	List<Blog> bestBlog();
 }

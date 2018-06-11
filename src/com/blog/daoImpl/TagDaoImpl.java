@@ -50,7 +50,26 @@ public class TagDaoImpl extends HibernateUtil implements TagDao {
 
 	@Override
 	public boolean deleteTag(Tag tag) {
-		return delete(tag);
+		Session session = sessionFactory.openSession();
+		Transaction transaction = session.beginTransaction();
+		Set<Blog> blogs = tag.getBlogs();
+		boolean temp = false;
+		try {
+			if (blogs != null) {
+				for (Blog blog : blogs) {
+					blog.getTags().remove(tag);
+					blogDao.updateBlog(blog);
+				}
+			}
+			temp = delete(tag);
+			transaction.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			transaction.rollback();
+		} finally {
+			session.close();
+		}
+		return temp;
 	}
 
 	@Override

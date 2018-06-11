@@ -11,9 +11,12 @@ import org.springframework.stereotype.Service;
 import com.blog.dao.BlogDao;
 import com.blog.dao.CommentDao;
 import com.blog.dao.UpDownDao;
+import com.blog.dao.UserDao;
 import com.blog.domain.Blog;
 import com.blog.domain.Tag;
+import com.blog.domain.User;
 import com.blog.service.NormalService;
+import com.blog.util.response.BestUserData;
 import com.blog.util.response.BlogData;
 import com.blog.util.response.BlogList;
 @Service
@@ -31,6 +34,10 @@ public class NormalServiceImpl implements NormalService {
 	@Autowired
 	@Qualifier("upDownDaoImpl")
 	private UpDownDao upDownDao;
+	
+	@Autowired
+	@Qualifier("userDaoImpl")
+	private UserDao userDao;
 	
 	@Override
 	public List<BlogList> readBlog() {
@@ -80,11 +87,33 @@ public class NormalServiceImpl implements NormalService {
 		if (blog.getBlogState() != 0) {
 			return null;
 		}
-		BlogData data = new BlogData(blog.getBlogId(), blog.getBlogTitle(), blog.getBlogContent(), blog.getNumberOfAgree(), blog.getNumberOfDisagree(),
-				blog.getBlogState(), blog.getPostTime(), blog.getLastModifiedTime(), blog.getUserId(), seTags);
+		BlogData data = new BlogData(blog.getBlogId(), blog.getBlogTitle(), blog.getBlogContent(), 
+				blog.getNumberOfAgree(), blog.getNumberOfDisagree(), blog.getBlogState(), 
+				blog.getPostTime(), blog.getLastModifiedTime(), blog.getUserId(), seTags);
 		return data;
 	}
 
+	@Override
+	public List<BestUserData> bestUser() {
+		List<User> users = userDao.bestUser();
+		List<BestUserData> bestUserDatas = new ArrayList<>();
+		for (User user : users) {
+			int numberOfBlogs = blogDao.numberOfBlog(user.getUserId());
+			bestUserDatas.add(new BestUserData(user.getUserId(), user.getNickName(), null, 
+					user.getNumOfFans(), numberOfBlogs));
+		}
+		return bestUserDatas;
+	}
 
 
+	@Override
+	public List<BlogList> bestBlog() {
+		List<Blog> blogs = blogDao.bestBlog();
+		List<BlogList> bestBlogList = new ArrayList<>();
+		for (Blog blog : blogs) {
+			bestBlogList.add(new BlogList(blog.getBlogId(), blog.getBlogTitle(), blog.getNumberOfAgree(), 
+					blog.getBlogState(), blog.getPostTime(), blog.getUserId()));
+		}
+		return bestBlogList;
+	}
 }

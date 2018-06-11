@@ -24,6 +24,7 @@ import com.blog.util.request.NewBlog;
 import com.blog.util.request.TagList;
 import com.blog.util.response.BlogList;
 import com.blog.util.response.BlogListDataNew;
+import com.blog.util.response.CommentWithNickName;
 import com.blog.util.response.UserSimpleData;
 
 @Controller
@@ -170,7 +171,7 @@ public class UserController {
 	@ResponseBody
 	@RequestMapping("/selectTag/{tagId}")
 	public List<BlogList> selectTag(@PathVariable("tagId") Integer tagId) {
-		return null;
+		return userService.selectTag(tagId);
 	}
 	
 	/**
@@ -384,7 +385,8 @@ public class UserController {
 	 */
 	@ResponseBody
 	@RequestMapping(value = "/commentByBlog/{page}", method = RequestMethod.POST)
-	public List<Comment> commentByBlog(@PathVariable("page") Integer page, @RequestBody Blog blog) {
+	public List<CommentWithNickName> commentByBlog(@PathVariable("page") Integer page, @RequestBody Blog blog) {
+	
 		return userService.commentByBlog(blog.getBlogId(), page);
 	}
 	

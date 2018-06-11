@@ -10,6 +10,7 @@ import com.blog.util.request.NewBlog;
 import com.blog.util.request.TagList;
 import com.blog.util.response.BlogList;
 import com.blog.util.response.BlogListDataNew;
+import com.blog.util.response.CommentWithNickName;
 import com.blog.util.response.UserSimpleData;
 
 public interface UserService {
@@ -207,7 +208,7 @@ public interface UserService {
 	 * @param page 页码
 	 * @return list，评论列表
 	 */
-	List<Comment> commentByBlog(Integer blogId, Integer page);
+	List<CommentWithNickName> commentByBlog(Integer blogId, Integer page);
 	
 	/**
 	 * 根据用户id分页返回博客列表

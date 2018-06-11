@@ -207,4 +207,59 @@ public class BlogDaoImpl extends HibernateUtil implements BlogDao {
 		return number;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Blog> bestBlog() {
+		String hql = "from Blog where blogState = 0";
+		List<Object> objects = null;
+		Session session = sessionFactory.openSession();
+		Query query = null;
+		try {
+			query = session.createQuery(hql);
+			objects = query.list();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			session.close();
+		}
+		if (objects == null) {
+			return null;
+		}
+		int number = objects.size();
+		int[] location = new int[number];
+		for (int i = 0; i < number; i++) {
+			location[i] = i;
+		}
+		int[] temp = new int[number];
+		for (int i = 0; i < number; i++) {
+			Blog blog = (Blog)objects.get(i);
+			temp[i] = blog.getNumberOfAgree();
+		}
+		for (int i = 1; i < number; i++) {
+			for (int j = 0; j < number - i; j++) {
+				if (temp[j] < temp[j + 1]) {
+					int temp_ = temp[j + 1];
+					temp[j + 1] = temp[j];
+					temp[j] = temp_;
+					temp_ = location[j + 1];
+					location[j + 1] = location[j];
+					location[j] = temp_;
+				}
+			}
+		}
+		List<Blog> blogs = new ArrayList<>();
+		if (number <= 6) {
+			for (int i = 0; i < number; i++) {
+				Blog blog = (Blog)objects.get(location[i]);
+				blogs.add(blog);
+			}
+		} else {
+			for (int i = 0; i < 6; i++) {
+				Blog blog = (Blog)objects.get(location[i]);
+				blogs.add(blog);
+			}
+		}
+		return blogs;
+	}
+
 }

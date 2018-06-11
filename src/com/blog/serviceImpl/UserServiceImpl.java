@@ -26,6 +26,7 @@ import com.blog.util.request.NewBlog;
 import com.blog.util.request.TagList;
 import com.blog.util.response.BlogList;
 import com.blog.util.response.BlogListDataNew;
+import com.blog.util.response.CommentWithNickName;
 import com.blog.util.response.UserSimpleData;
 
 import java.util.Set;
@@ -168,13 +169,16 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public List<BlogList> selectTag(Integer tagId) {
+		if (tagId == null) {
+			return null;
+		}
 		List<BlogList> blogLists = new ArrayList<>();
 		Set<Blog> blog = tagDao.findTagById(tagId).getBlogs();
-		if (blog != null) {/*
+		if (blog != null) {
 			for(Blog Blog:blog) {
 				blogLists.add(new BlogList(Blog.getBlogId(),Blog.getBlogTitle(),Blog.getNumberOfAgree(),
 						Blog.getBlogState(),Blog.getPostTime(),Blog.getUserId()));
-			}*/
+			}
 		}
 		return blogLists;
 	}
@@ -259,6 +263,16 @@ public class UserServiceImpl implements UserService {
 			Timestamp tx = new Timestamp(new Date().getTime());
 			blog2.setLastModifiedTime(tx);
 			blog2.setBlogContent(blog.getBlogContent());
+			Set<Tag> tags = new HashSet<>();
+			if (blog.getTags() != null) {
+				for (Integer integer : blog.getTags()) {
+					Tag tag = tagDao.findTagById(integer);
+					tags.add(tag);
+				}
+				blog2.setTags(tags);
+			} else {
+				blog2.setTags(null);
+			}
 			if (blogDao.updateBlog(blog2)) {
 				return 200;
 			} else {
@@ -378,11 +392,17 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<Comment> commentByBlog(Integer blogId, Integer page) {
+	public List<CommentWithNickName> commentByBlog(Integer blogId, Integer page) {
 		if (blogId == null || page == null) {
 			return null;
 		}
-		return commentDao.findCommentByBlog(blogId, page);
+		List<CommentWithNickName> temp = new ArrayList<>(); 
+		List<Comment> comments = commentDao.findCommentByBlog(blogId, page);
+		for (Comment comment : comments) {
+			String nickName = userDao.findUserById(comment.getUserId()).getNickName();
+			temp.add(new CommentWithNickName(comment, nickName));
+		}
+		return temp;
 	}
 	
 	@Override

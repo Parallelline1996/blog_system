@@ -67,4 +67,10 @@ public interface UserDao {
 	 * @return 整数类型，代表用户人数
 	 */
 	int numberOfUser();
+	
+	/**
+	 * 被关注人数前6的用户
+	 * @return 用户的list
+	 */
+	List<User> bestUser();
 }

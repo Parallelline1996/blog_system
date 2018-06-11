@@ -11,7 +11,8 @@ public class BlogListDataNew {
 	private Integer userId;
 	private Integer numberOfComments;
 	private String blogContent;
-	
+	public BlogListDataNew() {
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
